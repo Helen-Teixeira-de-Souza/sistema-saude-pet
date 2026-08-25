@@ -1,58 +1,68 @@
 from datetime import date, timedelta
 from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Pet, Consulta, Vacinacao, Exame, Medicamento, Cirurgia, AvisoVacinacao
 from .forms import PetForm, ConsultaForm, VacinacaoForm, ExameForm, MedicamentoForm, CirurgiaForm
 
-# --- GESTÃO DO PET (CBVs) ---
+# --- GESTÃO DO PET ---
 
-class PetListView(ListView):
-    model = Pet
-    template_name = 'pet/pet_list.html'
-    context_object_name = 'pets'
+def pet_list(request):
+    pets = Pet.objects.all()
+    return render(request, 'pet/pet_list.html', {'pets': pets})
 
+def pet_detail(request, pk):
+    pet = get_object_or_404(Pet, pk=pk)
 
-class PetDetailView(DetailView):
-    model = Pet
-    template_name = 'pet/pet_detail.html'
-    context_object_name = 'pet'
+    context = {
+        'pet': pet,
+        'consultas': pet.consultas.all(),
+        'vacinacoes': pet.vacinacoes.all(),
+        'exames': pet.exames.all(),
+        'medicamentos': pet.medicamentos.all(),
+        'cirurgias': pet.cirurgias.all(),
+    }
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        pet = self.get_object()
-        
-        context['consultas'] = pet.consultas.all()
-        context['vacinacoes'] = pet.vacinacoes.all()
-        context['exames'] = pet.exames.all()
-        context['medicamentos'] = pet.medicamentos.all()
-        context['cirurgias'] = pet.cirurgias.all()
-        return context
+    return render(request, 'pet/pet_detail.html', context)
 
+def pet_create(request):
+    if request.method == 'POST':
+        form = PetForm(request.POST)
 
-class PetCreateView(CreateView):
-    model = Pet
-    form_class = PetForm
-    template_name = 'pet/pet_form.html'
-    
-    def get_success_url(self):
-        return reverse_lazy('pet_detail', kwargs={'pk': self.object.pk})
+        if form.is_valid():
+            pet = form.save()
+            return redirect('pet_detail', pk=pet.pk)
 
+    else:
+        form = PetForm()
 
-class PetUpdateView(UpdateView):
-    model = Pet
-    form_class = PetForm
-    template_name = 'pet/pet_form.html'
+    return render(request, 'pet/pet_form.html', {'form': form})
 
-    def get_success_url(self):
-        return reverse_lazy('pet_detail', kwargs={'pk': self.object.pk})
+def pet_update(request, pk):
+    pet = get_object_or_404(Pet, pk=pk)
 
+    if request.method == 'POST':
+        form = PetForm(request.POST, instance=pet)
 
-class PetDeleteView(DeleteView):
-    model = Pet
-    template_name = 'pet/pet_confirm_delete.html'
-    success_url = reverse_lazy('pet_list')
+        if form.is_valid():
+            pet = form.save()
+            return redirect('pet_detail', pk=pet.pk)
 
+    else:
+        form = PetForm(instance=pet)
+
+    return render(request, 'pet/pet_form.html', {'form': form, 'pet': pet})
+
+def pet_delete(request, pk):
+    pet = get_object_or_404(Pet, pk=pk)
+
+    if request.method == 'POST':
+        pet.delete()
+        return redirect('pet_list')
+
+    return render(
+        request,
+        'pet/pet_confirm_delete.html',
+        {'pet': pet}
+    )
 
 # --- REGISTROS VINCULADOS AO PET ---
 
@@ -124,7 +134,6 @@ def registrar_cirurgia(request, pet_pk):
     else:
         form = CirurgiaForm()
     return render(request, 'pet/registro_form.html', {'form': form, 'pet': pet, 'titulo': 'Registrar Cirurgia'})
-
 
 # --- DASHBOARD & ALERTAS ---
 

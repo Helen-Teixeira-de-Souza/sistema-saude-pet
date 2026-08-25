@@ -1,42 +1,40 @@
-from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Tutor
 from .forms import TutorForm
 
+# Detalhes do tutor
+def tutor_detail(request, pk):
+    tutor = get_object_or_404(Tutor, pk=pk)
+    pets = tutor.pets.all() 
+    return render(request, 'tutor/tutor_detail.html', {'tutor': tutor, 'pets': pets})
 
-class TutorListView(ListView):
-    model = Tutor
-    template_name = 'tutor/tutor_list.html'
-    context_object_name = 'tutores'
+# Criar tutor
+def tutor_create(request):
+    if request.method == 'POST':
+        form = TutorForm(request.POST)
+        if form.is_valid():
+            tutor = form.save()
+            return redirect('tutor_detail', pk=tutor.pk)
+    else:
+        form = TutorForm()
+    return render(request, 'tutor/tutor_form.html', {'form': form})
 
+# Atualizar tutor
+def tutor_update(request, pk):
+    tutor = get_object_or_404(Tutor, pk=pk)
+    if request.method == 'POST':
+        form = TutorForm(request.POST, instance=tutor)
+        if form.is_valid():
+            form.save()
+            return redirect('tutor_detail', pk=tutor.pk)
+    else:
+        form = TutorForm(instance=tutor)
+    return render(request, 'tutor/tutor_form.html', {'form': form})
 
-class TutorDetailView(DetailView):
-    model = Tutor
-    template_name = 'tutor/tutor_detail.html'
-    context_object_name = 'tutor'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        # Permite visualizar todos os pets cadastrados para este tutor
-        context['pets'] = self.object.pets.all()
-        return context
-
-
-class TutorCreateView(CreateView):
-    model = Tutor
-    form_class = TutorForm
-    template_name = 'tutor/tutor_form.html'
-    success_url = reverse_lazy('tutor_list')
-
-
-class TutorUpdateView(UpdateView):
-    model = Tutor
-    form_class = TutorForm
-    template_name = 'tutor/tutor_form.html'
-    success_url = reverse_lazy('tutor_list')
-
-
-class TutorDeleteView(DeleteView):
-    model = Tutor
-    template_name = 'tutor/tutor_confirm_delete.html'
-    success_url = reverse_lazy('tutor_list')
+# Deletar tutor
+def tutor_delete(request, pk):
+    tutor = get_object_or_404(Tutor, pk=pk)
+    if request.method == 'POST':
+        tutor.delete()
+        return redirect('pet_list') # ou home
+    return render(request, 'tutor/tutor_confirm_delete.html', {'tutor': tutor})

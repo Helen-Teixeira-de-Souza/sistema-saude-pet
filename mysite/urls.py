@@ -3,6 +3,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # Redireciona todas as rotas da clínica para o app 'clinica'
-    path('', include('clinica.urls')), 
+    path('pet/', include('pet.urls')),
+    path('tutor/', include('tutor.urls')),
 ]

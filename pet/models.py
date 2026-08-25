@@ -15,7 +15,6 @@ class Profissional(models.Model):
     def __str__(self):
         return f"{self.nome} - {self.especialidade}"
 
-
 class Pet(models.Model):
     SEXO_CHOICES = [
         ('M', 'Macho'),
