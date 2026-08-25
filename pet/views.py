@@ -1,23 +1,19 @@
+from datetime import date, timedelta
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Pet, Consulta, Vacina, Exame, Medicamento, Cirurgia, AvisoVacinacao
-from .forms import PetForm, ConsultaForm, VacinaForm, ExameForm, MedicamentoForm, CirurgiaForm
+from .models import Pet, Consulta, Vacinacao, Exame, Medicamento, Cirurgia, AvisoVacinacao
+from .forms import PetForm, ConsultaForm, VacinacaoForm, ExameForm, MedicamentoForm, CirurgiaForm
 
-# --- VIEWS DE PET ---
+# --- GESTÃO DO PET (CBVs) ---
 
 class PetListView(ListView):
     model = Pet
     template_name = 'pet/pet_list.html'
     context_object_name = 'pets'
 
-    def get_queryset(self):
-        # Caso queira filtrar apenas os pets do tutor logado:
-        # return Pet.objects.filter(tutor__user=self.request.user)
-        return Pet.objects.all()
 
 class PetDetailView(DetailView):
-    """Exibe o perfil completo do Pet e todo o seu histórico médico."""
     model = Pet
     template_name = 'pet/pet_detail.html'
     context_object_name = 'pet'
@@ -26,14 +22,13 @@ class PetDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         pet = self.get_object()
         
-        # Histórico completo agrupado no contexto
         context['consultas'] = pet.consultas.all()
-        context['vacinas'] = pet.vacinas.all()
+        context['vacinacoes'] = pet.vacinacoes.all()
         context['exames'] = pet.exames.all()
         context['medicamentos'] = pet.medicamentos.all()
         context['cirurgias'] = pet.cirurgias.all()
-        context['avisos'] = pet.avisos_vacina.all()
         return context
+
 
 class PetCreateView(CreateView):
     model = Pet
@@ -43,6 +38,7 @@ class PetCreateView(CreateView):
     def get_success_url(self):
         return reverse_lazy('pet_detail', kwargs={'pk': self.object.pk})
 
+
 class PetUpdateView(UpdateView):
     model = Pet
     form_class = PetForm
@@ -51,26 +47,28 @@ class PetUpdateView(UpdateView):
     def get_success_url(self):
         return reverse_lazy('pet_detail', kwargs={'pk': self.object.pk})
 
+
 class PetDeleteView(DeleteView):
     model = Pet
     template_name = 'pet/pet_confirm_delete.html'
     success_url = reverse_lazy('pet_list')
 
 
-# --- VIEWS DE REGISTROS VINCULADOS AO PET ---
+# --- REGISTROS VINCULADOS AO PET ---
 
-def registrar_vacina(request, pet_pk):
+def registrar_vacinacao(request, pet_pk):
     pet = get_object_or_404(Pet, pk=pet_pk)
     if request.method == 'POST':
-        form = VacinaForm(request.POST)
+        form = VacinacaoForm(request.POST)
         if form.is_valid():
-            vacina = form.save(commit=False)
-            vacina.pet = pet
-            vacina.save()
+            vacinacao = form.save(commit=False)
+            vacinacao.pet = pet
+            vacinacao.save()
             return redirect('pet_detail', pk=pet.pk)
     else:
-        form = VacinaForm()
-    return render(request, 'pet/registro_form.html', {'form': form, 'pet': pet, 'titulo': 'Registrar Vacina'})
+        form = VacinacaoForm()
+    return render(request, 'pet/registro_form.html', {'form': form, 'pet': pet, 'titulo': 'Registrar Vacinação'})
+
 
 def registrar_consulta(request, pet_pk):
     pet = get_object_or_404(Pet, pk=pet_pk)
@@ -85,6 +83,7 @@ def registrar_consulta(request, pet_pk):
         form = ConsultaForm()
     return render(request, 'pet/registro_form.html', {'form': form, 'pet': pet, 'titulo': 'Registrar Consulta'})
 
+
 def registrar_exame(request, pet_pk):
     pet = get_object_or_404(Pet, pk=pet_pk)
     if request.method == 'POST':
@@ -97,6 +96,7 @@ def registrar_exame(request, pet_pk):
     else:
         form = ExameForm()
     return render(request, 'pet/registro_form.html', {'form': form, 'pet': pet, 'titulo': 'Registrar Exame'})
+
 
 def registrar_medicamento(request, pet_pk):
     pet = get_object_or_404(Pet, pk=pet_pk)
@@ -111,6 +111,7 @@ def registrar_medicamento(request, pet_pk):
         form = MedicamentoForm()
     return render(request, 'pet/registro_form.html', {'form': form, 'pet': pet, 'titulo': 'Registrar Medicamento'})
 
+
 def registrar_cirurgia(request, pet_pk):
     pet = get_object_or_404(Pet, pk=pet_pk)
     if request.method == 'POST':
@@ -123,3 +124,12 @@ def registrar_cirurgia(request, pet_pk):
     else:
         form = CirurgiaForm()
     return render(request, 'pet/registro_form.html', {'form': form, 'pet': pet, 'titulo': 'Registrar Cirurgia'})
+
+
+# --- DASHBOARD & ALERTAS ---
+
+def avisos_vacinas(request):
+    """View global para listar vacinas próximas do vencimento ou vencidas"""
+    limite = date.today() + timedelta(days=30)
+    vacinas_alerta = Vacinacao.objects.filter(proxima_dose__lte=limite).order_by('proxima_dose')
+    return render(request, 'pet/avisos_vacinas.html', {'vacinas_alerta': vacinas_alerta})

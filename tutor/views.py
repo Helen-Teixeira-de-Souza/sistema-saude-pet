@@ -1,25 +1,42 @@
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-from .models import Consulta  # Certifique-se de que o modelo Consulta existe em clinica/models.py
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from .models import Tutor
+from .forms import TutorForm
 
-class ConsultaListView(ListView):
-    model = Consulta
-    template_name = 'clinica/consulta_list.html'
-    context_object_name = 'consultas'
 
-class ConsultaCreateView(CreateView):
-    model = Consulta
-    fields = ['tutor', 'data', 'motivo']  # Ajuste os campos conforme seu modelo Consulta
-    template_name = 'clinica/consulta_form.html'
-    success_url = reverse_lazy('consulta_list')
+class TutorListView(ListView):
+    model = Tutor
+    template_name = 'tutor/tutor_list.html'
+    context_object_name = 'tutores'
 
-class ConsultaUpdateView(UpdateView):
-    model = Consulta
-    fields = ['tutor', 'data', 'motivo']
-    template_name = 'clinica/consulta_form.html'
-    success_url = reverse_lazy('consulta_list')
 
-class ConsultaDeleteView(DeleteView):
-    model = Consulta
-    template_name = 'clinica/consulta_confirm_delete.html'
-    success_url = reverse_lazy('consulta_list')
+class TutorDetailView(DetailView):
+    model = Tutor
+    template_name = 'tutor/tutor_detail.html'
+    context_object_name = 'tutor'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Permite visualizar todos os pets cadastrados para este tutor
+        context['pets'] = self.object.pets.all()
+        return context
+
+
+class TutorCreateView(CreateView):
+    model = Tutor
+    form_class = TutorForm
+    template_name = 'tutor/tutor_form.html'
+    success_url = reverse_lazy('tutor_list')
+
+
+class TutorUpdateView(UpdateView):
+    model = Tutor
+    form_class = TutorForm
+    template_name = 'tutor/tutor_form.html'
+    success_url = reverse_lazy('tutor_list')
+
+
+class TutorDeleteView(DeleteView):
+    model = Tutor
+    template_name = 'tutor/tutor_confirm_delete.html'
+    success_url = reverse_lazy('tutor_list')
