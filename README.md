@@ -36,19 +36,6 @@ python manage.py runserver
 
 http://127.0.0.1:8000/
 
-## Próximos Passos
-
-- [ ] Cadastro de tutores
-- [ ] Login
-- [ ] CRUD de Pets
-- [ ] CRUD de Consultas
-- [ ] CRUD de Vacinas
-- [ ] CRUD de Exames
-- [ ] CRUD de Medicamentos
-- [ ] CRUD de Cirurgias
-- [ ] Histórico de Saúde
-- [ ] Avisos de Vacinação
-
 ## Autoras
 
 - Helen Souza
