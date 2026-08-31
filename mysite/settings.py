@@ -38,8 +38,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'tutor',
-    'pet'
-    ]
+    'pet',
+    'profissional',
+    'vacina',
+    'consulta',
+    'exame',
+    'cirurgia',
+    'medicamento',
+    'vacinacao',
+]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
