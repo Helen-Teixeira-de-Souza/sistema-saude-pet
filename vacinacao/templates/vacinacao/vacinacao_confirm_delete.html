@@ -1,0 +1,10 @@
+<h1>Excluir Vacinação</h1>
+
+<p>Tem certeza que deseja excluir a vacinação "{{ vacinacao.vacina.nome }}" do pet "{{ vacinacao.pet.nome }}"?</p>
+
+<form action="{% url 'vacinacao_delete' vacinacao.id %}" method="post">
+{% csrf_token %}
+<input type="submit" value="Confirmar exclusão">
+</form>
+
+<a href="{% url 'vacinacao_detail' vacinacao.id %}">Cancelar</a>

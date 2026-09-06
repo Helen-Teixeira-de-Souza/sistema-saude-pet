@@ -1,0 +1,38 @@
+<h1>{% if vacinacao %}Editar{% else %}Registrar{% endif %} Vacinação</h1>
+
+<form action="{% if vacinacao %}{% url 'vacinacao_update' vacinacao.id %}{% else %}{% url 'vacinacao_create' %}{% endif %}" method="post">
+{% csrf_token %}
+<p>
+    <label for="pet">Pet:</label>
+    <select name="pet" id="pet">
+        {% for pet in pet_list %}
+        <option value="{{ pet.id }}" {% if vacinacao.pet_id == pet.id %}selected{% endif %}>{{ pet.nome }}</option>
+        {% endfor %}
+    </select>
+</p>
+<p>
+    <label for="vacina">Vacina:</label>
+    <select name="vacina" id="vacina">
+        {% for vacina in vacina_list %}
+        <option value="{{ vacina.id }}" {% if vacinacao.vacina_id == vacina.id %}selected{% endif %}>{{ vacina.nome }}</option>
+        {% endfor %}
+    </select>
+</p>
+<p>
+    <label for="dose_atual">Dose atual:</label>
+    <input type="number" name="dose_atual" id="dose_atual" value="{{ vacinacao.dose_atual|default:1 }}">
+</p>
+<p>
+    <label for="data_aplicacao">Data de aplicação:</label>
+    <input type="date" name="data_aplicacao" id="data_aplicacao" value="{{ vacinacao.data_aplicacao|date:'Y-m-d'|default:'' }}">
+</p>
+<p>
+    <label for="proxima_dose">Próxima dose:</label>
+    <input type="date" name="proxima_dose" id="proxima_dose" value="{{ vacinacao.proxima_dose|date:'Y-m-d'|default:'' }}">
+</p>
+<p>
+    <label for="observacoes">Observações:</label><br>
+    <textarea name="observacoes" id="observacoes">{{ vacinacao.observacoes|default:'' }}</textarea>
+</p>
+<input type="submit" value="Salvar">
+</form>

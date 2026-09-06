@@ -1,0 +1,10 @@
+<h1>Excluir Medicamento</h1>
+
+<p>Tem certeza que deseja excluir "{{ medicamento.nome }}" do pet "{{ medicamento.pet.nome }}"?</p>
+
+<form action="{% url 'medicamento_delete' medicamento.id %}" method="post">
+{% csrf_token %}
+<input type="submit" value="Confirmar exclusão">
+</form>
+
+<a href="{% url 'medicamento_detail' medicamento.id %}">Cancelar</a>

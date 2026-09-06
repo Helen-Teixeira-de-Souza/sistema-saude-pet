@@ -1,0 +1,11 @@
+<h1>Cirurgia: {{ cirurgia.procedimento }}</h1>
+
+<p>Pet: {{ cirurgia.pet.nome }}</p>
+<p>Profissional responsável: {{ cirurgia.profissional.nome|default:"-" }}</p>
+<p>Data: {{ cirurgia.data }}</p>
+<p>Local: {{ cirurgia.local }}</p>
+<p>Cuidados pós-operatórios: {{ cirurgia.cuidados_pos_operatorios|default:"-" }}</p>
+
+<a href="{% url 'cirurgia_update' cirurgia.id %}">Editar</a>
+<a href="{% url 'cirurgia_delete' cirurgia.id %}">Excluir</a>
+<a href="{% url 'cirurgia_list' %}">Voltar</a>

@@ -1,0 +1,18 @@
+<h1>Vacinações</h1>
+
+{% if vacinacao_list %}
+    <ul>
+    {% for vacinacao in vacinacao_list %}
+        <li>
+            <a href="{% url 'vacinacao_detail' vacinacao.id %}">
+                {{ vacinacao.pet.nome }} - {{ vacinacao.vacina.nome }} (dose {{ vacinacao.dose_atual }})
+            </a>
+            - aplicada em {{ vacinacao.data_aplicacao }} - status: {{ vacinacao.status_alerta }}
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Nenhuma vacinação registrada.</p>
+{% endif %}
+
+<a href="{% url 'vacinacao_create' %}">Registrar nova vacinação</a>

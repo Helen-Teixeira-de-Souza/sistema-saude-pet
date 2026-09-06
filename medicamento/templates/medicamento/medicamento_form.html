@@ -1,0 +1,43 @@
+<h1>{% if medicamento %}Editar{% else %}Registrar{% endif %} Medicamento</h1>
+
+<form action="{% if medicamento %}{% url 'medicamento_update' medicamento.id %}{% else %}{% url 'medicamento_create' %}{% endif %}" method="post">
+{% csrf_token %}
+<p>
+    <label for="pet">Pet:</label>
+    <select name="pet" id="pet">
+        {% for pet in pet_list %}
+        <option value="{{ pet.id }}" {% if medicamento.pet_id == pet.id %}selected{% endif %}>{{ pet.nome }}</option>
+        {% endfor %}
+    </select>
+</p>
+<p>
+    <label for="consulta">Consulta de prescrição:</label>
+    <select name="consulta" id="consulta">
+        <option value="">-- Nenhuma --</option>
+        {% for consulta in consulta_list %}
+        <option value="{{ consulta.id }}" {% if medicamento.consulta_id == consulta.id %}selected{% endif %}>{{ consulta }}</option>
+        {% endfor %}
+    </select>
+</p>
+<p>
+    <label for="nome">Nome do medicamento:</label>
+    <input type="text" name="nome" id="nome" value="{{ medicamento.nome|default:'' }}">
+</p>
+<p>
+    <label for="dosagem">Dosagem:</label>
+    <input type="text" name="dosagem" id="dosagem" value="{{ medicamento.dosagem|default:'' }}">
+</p>
+<p>
+    <label for="frequencia">Frequência:</label>
+    <input type="text" name="frequencia" id="frequencia" value="{{ medicamento.frequencia|default:'' }}">
+</p>
+<p>
+    <label for="data_inicio">Data de início:</label>
+    <input type="date" name="data_inicio" id="data_inicio" value="{{ medicamento.data_inicio|date:'Y-m-d'|default:'' }}">
+</p>
+<p>
+    <label for="duracao_dias">Duração (dias):</label>
+    <input type="number" name="duracao_dias" id="duracao_dias" value="{{ medicamento.duracao_dias|default:1 }}">
+</p>
+<input type="submit" value="Salvar">
+</form>

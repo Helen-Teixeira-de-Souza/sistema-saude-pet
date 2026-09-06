@@ -1,0 +1,14 @@
+<h1>Medicamento: {{ medicamento.nome }}</h1>
+
+<p>Pet: {{ medicamento.pet.nome }}</p>
+<p>Consulta de prescrição: {{ medicamento.consulta|default:"-" }}</p>
+<p>Dosagem: {{ medicamento.dosagem }}</p>
+<p>Frequência: {{ medicamento.frequencia }}</p>
+<p>Data de início: {{ medicamento.data_inicio }}</p>
+<p>Duração: {{ medicamento.duracao_dias }} dia(s)</p>
+<p>Fim previsto: {{ medicamento.data_fim }}</p>
+<p>Status do tratamento: {{ medicamento.status_tratamento }}</p>
+
+<a href="{% url 'medicamento_update' medicamento.id %}">Editar</a>
+<a href="{% url 'medicamento_delete' medicamento.id %}">Excluir</a>
+<a href="{% url 'medicamento_list' %}">Voltar</a>
