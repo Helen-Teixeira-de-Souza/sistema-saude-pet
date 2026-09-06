@@ -1,39 +1,43 @@
-<h1>{% if cirurgia %}Editar{% else %}Registrar{% endif %} Cirurgia</h1>
+{% extends 'base.html' %}
 
-<form action="{% if cirurgia %}{% url 'cirurgia_update' cirurgia.id %}{% else %}{% url 'cirurgia_create' %}{% endif %}" method="post">
-{% csrf_token %}
-<p>
-    <label for="pet">Pet:</label>
-    <select name="pet" id="pet">
-        {% for pet in pet_list %}
-        <option value="{{ pet.id }}" {% if cirurgia.pet_id == pet.id %}selected{% endif %}>{{ pet.nome }}</option>
-        {% endfor %}
-    </select>
-</p>
-<p>
-    <label for="profissional">Profissional responsável:</label>
-    <select name="profissional" id="profissional">
-        <option value="">-- Nenhum --</option>
-        {% for profissional in profissional_list %}
-        <option value="{{ profissional.id }}" {% if cirurgia.profissional_id == profissional.id %}selected{% endif %}>{{ profissional.nome }}</option>
-        {% endfor %}
-    </select>
-</p>
-<p>
-    <label for="procedimento">Procedimento:</label>
-    <input type="text" name="procedimento" id="procedimento" value="{{ cirurgia.procedimento|default:'' }}">
-</p>
-<p>
-    <label for="data">Data da cirurgia:</label>
-    <input type="date" name="data" id="data" value="{{ cirurgia.data|date:'Y-m-d'|default:'' }}">
-</p>
-<p>
-    <label for="local">Local:</label>
-    <input type="text" name="local" id="local" value="{{ cirurgia.local|default:'' }}">
-</p>
-<p>
-    <label for="cuidados_pos_operatorios">Cuidados pós-operatórios:</label><br>
-    <textarea name="cuidados_pos_operatorios" id="cuidados_pos_operatorios">{{ cirurgia.cuidados_pos_operatorios|default:'' }}</textarea>
-</p>
-<input type="submit" value="Salvar">
-</form>
+{% block content %}
+    <h1>{% if cirurgia %}Editar{% else %}Registrar{% endif %} Cirurgia</h1>
+
+    <form action="{% if cirurgia %}{% url 'cirurgia_update' cirurgia.id %}{% else %}{% url 'cirurgia_create' %}{% endif %}" method="post">
+    {% csrf_token %}
+    <p>
+        <label for="pet">Pet:</label>
+        <select name="pet" id="pet">
+            {% for pet in pet_list %}
+            <option value="{{ pet.id }}" {% if cirurgia.pet_id == pet.id %}selected{% endif %}>{{ pet.nome }}</option>
+            {% endfor %}
+        </select>
+    </p>
+    <p>
+        <label for="profissional">Profissional responsável:</label>
+        <select name="profissional" id="profissional">
+            <option value="">-- Nenhum --</option>
+            {% for profissional in profissional_list %}
+            <option value="{{ profissional.id }}" {% if cirurgia.profissional_id == profissional.id %}selected{% endif %}>{{ profissional.nome }}</option>
+            {% endfor %}
+        </select>
+    </p>
+    <p>
+        <label for="procedimento">Procedimento:</label>
+        <input type="text" name="procedimento" id="procedimento" value="{{ cirurgia.procedimento|default:'' }}">
+    </p>
+    <p>
+        <label for="data">Data da cirurgia:</label>
+        <input type="date" name="data" id="data" value="{{ cirurgia.data|date:'Y-m-d'|default:'' }}">
+    </p>
+    <p>
+        <label for="local">Local:</label>
+        <input type="text" name="local" id="local" value="{{ cirurgia.local|default:'' }}">
+    </p>
+    <p>
+        <label for="cuidados_pos_operatorios">Cuidados pós-operatórios:</label><br>
+        <textarea name="cuidados_pos_operatorios" id="cuidados_pos_operatorios">{{ cirurgia.cuidados_pos_operatorios|default:'' }}</textarea>
+    </p>
+    <input type="submit" value="Salvar">
+    </form>
+{% endblock %}

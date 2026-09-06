@@ -1,10 +1,14 @@
-<h1>Excluir Vacinação</h1>
+{% extends 'base.html' %}
 
-<p>Tem certeza que deseja excluir a vacinação "{{ vacinacao.vacina.nome }}" do pet "{{ vacinacao.pet.nome }}"?</p>
+{% block content %}
+    <h1>Excluir Vacinação</h1>
 
-<form action="{% url 'vacinacao_delete' vacinacao.id %}" method="post">
-{% csrf_token %}
-<input type="submit" value="Confirmar exclusão">
-</form>
+    <p>Tem certeza que deseja excluir a vacinação "{{ vacinacao.vacina.nome }}" do pet "{{ vacinacao.pet.nome }}"?</p>
 
-<a href="{% url 'vacinacao_detail' vacinacao.id %}">Cancelar</a>
+    <form action="{% url 'vacinacao_delete' vacinacao.id %}" method="post">
+    {% csrf_token %}
+    <input type="submit" value="Confirmar exclusão">
+    </form>
+
+    <a href="{% url 'vacinacao_detail' vacinacao.id %}">Cancelar</a>
+{% endblock %}

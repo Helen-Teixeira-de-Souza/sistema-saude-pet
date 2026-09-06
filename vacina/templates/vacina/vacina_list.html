@@ -1,16 +1,20 @@
-<h1>Vacinas</h1>
+{% extends 'base.html' %}
 
-{% if vacina_list %}
-    <ul>
-    {% for vacina in vacina_list %}
-        <li>
-            <a href="{% url 'vacina_detail' vacina.id %}">{{ vacina.nome }}</a>
-            - {{ vacina.quantidade_dose }} dose(s) - intervalo {{ vacina.intervalo_doses_dias }} dia(s)
-        </li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>Nenhuma vacina cadastrada.</p>
-{% endif %}
+{% block content %}
+    <h1>Vacinas</h1>
 
-<a href="{% url 'vacina_create' %}">Cadastrar nova vacina</a>
+    {% if vacina_list %}
+        <ul>
+        {% for vacina in vacina_list %}
+            <li>
+                <a href="{% url 'vacina_detail' vacina.id %}">{{ vacina.nome }}</a>
+                - {{ vacina.quantidade_dose }} dose(s) - intervalo {{ vacina.intervalo_doses_dias }} dia(s)
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>Nenhuma vacina cadastrada.</p>
+    {% endif %}
+
+    <a href="{% url 'vacina_create' %}">Cadastrar nova vacina</a>
+{% endblock %}

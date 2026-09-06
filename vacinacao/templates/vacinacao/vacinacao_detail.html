@@ -1,12 +1,16 @@
-<h1>Vacinação: {{ vacinacao.vacina.nome }}</h1>
+{% extends 'base.html' %}
 
-<p>Pet: {{ vacinacao.pet.nome }}</p>
-<p>Dose atual: {{ vacinacao.dose_atual }}</p>
-<p>Data de aplicação: {{ vacinacao.data_aplicacao }}</p>
-<p>Próxima dose: {{ vacinacao.proxima_dose|default:"-" }}</p>
-<p>Status: {{ vacinacao.status_alerta }}</p>
-<p>Observações: {{ vacinacao.observacoes|default:"-" }}</p>
+{% block content %}
+    <h1>Vacinação: {{ vacinacao.vacina.nome }}</h1>
 
-<a href="{% url 'vacinacao_update' vacinacao.id %}">Editar</a>
-<a href="{% url 'vacinacao_delete' vacinacao.id %}">Excluir</a>
-<a href="{% url 'vacinacao_list' %}">Voltar</a>
+    <p>Pet: {{ vacinacao.pet.nome }}</p>
+    <p>Dose atual: {{ vacinacao.dose_atual }}</p>
+    <p>Data de aplicação: {{ vacinacao.data_aplicacao }}</p>
+    <p>Próxima dose: {{ vacinacao.proxima_dose|default:"-" }}</p>
+    <p>Status: {{ vacinacao.status_alerta }}</p>
+    <p>Observações: {{ vacinacao.observacoes|default:"-" }}</p>
+
+    <a href="{% url 'vacinacao_update' vacinacao.id %}">Editar</a>
+    <a href="{% url 'vacinacao_delete' vacinacao.id %}">Excluir</a>
+    <a href="{% url 'vacinacao_list' %}">Voltar</a>
+{% endblock %}

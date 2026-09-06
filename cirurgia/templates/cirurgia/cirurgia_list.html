@@ -1,19 +1,23 @@
 {% extends "base.html" %}
-<h1>Cirurgias</h1>
 
-{% if cirurgia_list %}
-    <ul>
-    {% for cirurgia in cirurgia_list %}
-        <li>
-            <a href="{% url 'cirurgia_detail' cirurgia.id %}">
-                {{ cirurgia.pet.nome }} - {{ cirurgia.procedimento }} ({{ cirurgia.data }})
-            </a>
-            - local: {{ cirurgia.local }}
-        </li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>Nenhuma cirurgia registrada.</p>
-{% endif %}
+{% block content %}
+    <h1>Cirurgias</h1>
 
-<a href="{% url 'cirurgia_create' %}">Registrar nova cirurgia</a>
+    {% if cirurgia_list %}
+        <ul>
+        {% for cirurgia in cirurgia_list %}
+            <li>
+                <a href="{% url 'cirurgia_detail' cirurgia.id %}">
+                    {{ cirurgia.pet.nome }} - {{ cirurgia.procedimento }} ({{ cirurgia.data }})
+                </a>
+                - local: {{ cirurgia.local }}
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>Nenhuma cirurgia registrada.</p>
+    {% endif %}
+
+    <a href="{% url 'cirurgia_create' %}">Registrar nova cirurgia</a>
+
+{% endblock %}

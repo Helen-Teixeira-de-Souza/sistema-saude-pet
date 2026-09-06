@@ -1,22 +1,26 @@
-<h1>{% if vacina %}Editar{% else %}Cadastrar{% endif %} Vacina</h1>
+{% extends 'base.html' %}
 
-<form action="{% if vacina %}{% url 'vacina_update' vacina.id %}{% else %}{% url 'vacina_create' %}{% endif %}" method="post">
-{% csrf_token %}
-<p>
-    <label for="nome">Nome:</label>
-    <input type="text" name="nome" id="nome" value="{{ vacina.nome|default:'' }}">
-</p>
-<p>
-    <label for="quantidade_dose">Quantidade de doses:</label>
-    <input type="number" name="quantidade_dose" id="quantidade_dose" value="{{ vacina.quantidade_dose|default:1 }}">
-</p>
-<p>
-    <label for="intervalo_doses_dias">Intervalo entre doses (dias):</label>
-    <input type="number" name="intervalo_doses_dias" id="intervalo_doses_dias" value="{{ vacina.intervalo_doses_dias|default:0 }}">
-</p>
-<p>
-    <label for="descricao">Descrição:</label><br>
-    <textarea name="descricao" id="descricao">{{ vacina.descricao|default:'' }}</textarea>
-</p>
-<input type="submit" value="Salvar">
-</form>
+{% block content %}
+    <h1>{% if vacina %}Editar{% else %}Cadastrar{% endif %} Vacina</h1>
+
+    <form action="{% if vacina %}{% url 'vacina_update' vacina.id %}{% else %}{% url 'vacina_create' %}{% endif %}" method="post">
+    {% csrf_token %}
+    <p>
+        <label for="nome">Nome:</label>
+        <input type="text" name="nome" id="nome" value="{{ vacina.nome|default:'' }}">
+    </p>
+    <p>
+        <label for="quantidade_dose">Quantidade de doses:</label>
+        <input type="number" name="quantidade_dose" id="quantidade_dose" value="{{ vacina.quantidade_dose|default:1 }}">
+    </p>
+    <p>
+        <label for="intervalo_doses_dias">Intervalo entre doses (dias):</label>
+        <input type="number" name="intervalo_doses_dias" id="intervalo_doses_dias" value="{{ vacina.intervalo_doses_dias|default:0 }}">
+    </p>
+    <p>
+        <label for="descricao">Descrição:</label><br>
+        <textarea name="descricao" id="descricao">{{ vacina.descricao|default:'' }}</textarea>
+    </p>
+    <input type="submit" value="Salvar">
+    </form>
+{% endblock %}

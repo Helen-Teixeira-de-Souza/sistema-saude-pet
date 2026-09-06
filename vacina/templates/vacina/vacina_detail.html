@@ -1,9 +1,13 @@
-<h1>{{ vacina.nome }}</h1>
+{% extends 'base.html' %}
 
-<p>Quantidade de doses: {{ vacina.quantidade_dose }}</p>
-<p>Intervalo entre doses: {{ vacina.intervalo_doses_dias }} dia(s)</p>
-<p>Descrição: {{ vacina.descricao }}</p>
+{% block content %}
+    <h1>{{ vacina.nome }}</h1>
 
-<a href="{% url 'vacina_update' vacina.id %}">Editar</a>
-<a href="{% url 'vacina_delete' vacina.id %}">Excluir</a>
-<a href="{% url 'vacina_list' %}">Voltar</a>
+    <p>Quantidade de doses: {{ vacina.quantidade_dose }}</p>
+    <p>Intervalo entre doses: {{ vacina.intervalo_doses_dias }} dia(s)</p>
+    <p>Descrição: {{ vacina.descricao }}</p>
+
+    <a href="{% url 'vacina_update' vacina.id %}">Editar</a>
+    <a href="{% url 'vacina_delete' vacina.id %}">Excluir</a>
+    <a href="{% url 'vacina_list' %}">Voltar</a>
+{% endblock %}
