@@ -9,6 +9,6 @@ urlpatterns = [
     path('vacinacao/', include('vacinacao.urls')),
     path('vacina/', include('vacina.urls')),
     path('cirurgia/', include('cirurgia.urls')),
-    path('medicamento/', include('medicamento.urls')), # <-- Vírgula adicionada aqui!
+    path('medicamento/', include('medicamento.urls')), 
     path('consultas/', include('consulta.urls')),
 ]
