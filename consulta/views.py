@@ -1,27 +1,22 @@
-# Obs: revisar essa parte
-
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Consulta
 from .forms import ConsultaForm
-
-# consulta/views.py
-from django.shortcuts import redirect
 
 # View para redirecionar a home
 def home(request):
     return redirect('consulta:listar')
 
-# 1. List all consultations
+# Listar todas as consultas
 def listar_consultas(request):
-    consultas = Consulta.objects.all()
+    consultas = Consulta.objects.select_related('pet', 'profissional').all()
     return render(request, 'consulta/consulta_list.html', {'consultas': consultas})
 
-# 2. View consultation details
+# Exibir detalhes da consulta
 def detalhe_consulta(request, pk):
     consulta = get_object_or_404(Consulta, pk=pk)
     return render(request, 'consulta/consulta_detail.html', {'consulta': consulta})
 
-# 3. Create a new consultation
+# Criar uma nova consulta
 def criar_consulta(request):
     if request.method == 'POST':
         form = ConsultaForm(request.POST)
@@ -32,7 +27,7 @@ def criar_consulta(request):
         form = ConsultaForm()
     return render(request, 'consulta/consulta_form.html', {'form': form, 'titulo': 'Agendar Consulta'})
 
-# 4. Edit an existing consultation
+# Editar uma consulta existente
 def editar_consulta(request, pk):
     consulta = get_object_or_404(Consulta, pk=pk)
     if request.method == 'POST':
@@ -44,7 +39,7 @@ def editar_consulta(request, pk):
         form = ConsultaForm(instance=consulta)
     return render(request, 'consulta/consulta_form.html', {'form': form, 'titulo': 'Editar Consulta'})
 
-# 5. Delete a consultation
+# Excluir uma consulta
 def deletar_consulta(request, pk):
     consulta = get_object_or_404(Consulta, pk=pk)
     if request.method == 'POST':

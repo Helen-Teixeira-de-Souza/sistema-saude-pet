@@ -2,7 +2,6 @@ from django.db import models
 from pet.models import Pet
 from profissional.models import Profissional
 
-
 class Consulta(models.Model):
     pet = models.ForeignKey(Pet, on_delete=models.CASCADE, related_name='consultas', verbose_name='Pet')
     profissional = models.ForeignKey(
