@@ -7,19 +7,19 @@ from profissional.models import Profissional
 from .models import Cirurgia
 
 
-def cirurgia_list(request):
+def listar_cirurgia(request):
     cirurgia_list = Cirurgia.objects.all()
     context = {"cirurgia_list": cirurgia_list}
     return render(request, "cirurgia/cirurgia_list.html", context)
 
 
-def cirurgia_detail(request, cirurgia_id):
+def detalhe_cirurgia(request, cirurgia_id):
     cirurgia = get_object_or_404(Cirurgia, pk=cirurgia_id)
     context = {"cirurgia": cirurgia}
     return render(request, "cirurgia/cirurgia_detail.html", context)
 
 
-def cirurgia_create(request):
+def criar_cirurgia(request):
     if request.method == "POST":
         pet = get_object_or_404(Pet, pk=request.POST["pet"])
         profissional_id = request.POST.get("profissional") or None
@@ -46,7 +46,7 @@ def cirurgia_create(request):
     return render(request, "cirurgia/cirurgia_form.html", context)
 
 
-def cirurgia_update(request, cirurgia_id):
+def editar_cirurgia(request, cirurgia_id):
     cirurgia = get_object_or_404(Cirurgia, pk=cirurgia_id)
 
     if request.method == "POST":
@@ -68,7 +68,7 @@ def cirurgia_update(request, cirurgia_id):
     return render(request, "cirurgia/cirurgia_form.html", context)
 
 
-def cirurgia_delete(request, cirurgia_id):
+def deletar_cirurgia(request, cirurgia_id):
     cirurgia = get_object_or_404(Cirurgia, pk=cirurgia_id)
 
     if request.method == "POST":

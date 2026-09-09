@@ -5,19 +5,19 @@ from django.urls import reverse
 from .models import Vacina
 
 
-def vacina_list(request):
+def listar_vacina(request):
     vacina_list = Vacina.objects.all()
     context = {"vacina_list": vacina_list}
     return render(request, "vacina/vacina_list.html", context)
 
 
-def vacina_detail(request, vacina_id):
+def detalhe_vacina(request, vacina_id):
     vacina = get_object_or_404(Vacina, pk=vacina_id)
     context = {"vacina": vacina}
     return render(request, "vacina/vacina_detail.html", context)
 
 
-def vacina_create(request):
+def criar_vacina(request):
     if request.method == "POST":
         nome = request.POST["nome"]
         quantidade_dose = request.POST["quantidade_dose"]
@@ -35,7 +35,7 @@ def vacina_create(request):
     return render(request, "vacina/vacina_form.html")
 
 
-def vacina_update(request, vacina_id):
+def editar_vacina(request, vacina_id):
     vacina = get_object_or_404(Vacina, pk=vacina_id)
 
     if request.method == "POST":
@@ -50,7 +50,7 @@ def vacina_update(request, vacina_id):
     return render(request, "vacina/vacina_form.html", context)
 
 
-def vacina_delete(request, vacina_id):
+def deletar_vacina(request, vacina_id):
     vacina = get_object_or_404(Vacina, pk=vacina_id)
 
     if request.method == "POST":

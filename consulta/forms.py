@@ -12,3 +12,10 @@ class ConsultaForm(forms.ModelForm):
             'diagnostico': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Informe o diagnóstico...'}),
             'observacoes': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Observações adicionais da consulta...'}),
         }
+        labels = {
+            'pet': 'Paciente (Pet)',
+            'profissional': 'Veterinário / Profissional',
+            'data': 'Data da Consulta',
+            'diagnostico': 'Diagnóstico',
+            'observacoes': 'Observações Adicionais',
+        }

@@ -7,19 +7,19 @@ from vacina.models import Vacina
 from .models import Vacinacao
 
 
-def vacinacao_list(request):
+def listar_vacinacao(request):
     vacinacao_list = Vacinacao.objects.all()
     context = {"vacinacao_list": vacinacao_list}
     return render(request, "vacinacao/vacinacao_list.html", context)
 
 
-def vacinacao_detail(request, vacinacao_id):
+def detalhe_vacinacao(request, vacinacao_id):
     vacinacao = get_object_or_404(Vacinacao, pk=vacinacao_id)
     context = {"vacinacao": vacinacao}
     return render(request, "vacinacao/vacinacao_detail.html", context)
 
 
-def vacinacao_create(request):
+def criar_vacinacao(request):
     if request.method == "POST":
         pet = get_object_or_404(Pet, pk=request.POST["pet"])
         vacina = get_object_or_404(Vacina, pk=request.POST["vacina"])
@@ -45,7 +45,7 @@ def vacinacao_create(request):
     return render(request, "vacinacao/vacinacao_form.html", context)
 
 
-def vacinacao_update(request, vacinacao_id):
+def editar_vacinacao(request, vacinacao_id):
     vacinacao = get_object_or_404(Vacinacao, pk=vacinacao_id)
 
     if request.method == "POST":
@@ -66,7 +66,7 @@ def vacinacao_update(request, vacinacao_id):
     return render(request, "vacinacao/vacinacao_form.html", context)
 
 
-def vacinacao_delete(request, vacinacao_id):
+def deletar_vacinacao(request, vacinacao_id):
     vacinacao = get_object_or_404(Vacinacao, pk=vacinacao_id)
 
     if request.method == "POST":
