@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Pet
 from .forms import PetForm
+from datatime import date
 
 # --- GESTÃO DO PET ---
 
@@ -11,8 +12,15 @@ def pet_list(request):
 def pet_detail(request, pk):
     pet = get_object_or_404(Pet, pk=pk)
 
+    # Cálculo da idade
+    hoje = date.today()
+    idade = hoje.year - pet.data_nascimento.year - (
+        (hoje.month, hoje.day) < (pet.data_nascimento.month, pet.data_nascimento.day)
+    )
+
     context = {
         'pet': pet,
+        'idade': idade,
         'consultas': pet.consultas.all(),
         'vacinacoes': pet.vacinacoes.all(),
         'exames': pet.exames.all(),

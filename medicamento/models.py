@@ -26,14 +26,5 @@ class Medicamento(models.Model):
         verbose_name = 'Medicamento'
         verbose_name_plural = 'Medicamentos'
 
-    @property
-    def data_fim(self):
-        return self.data_inicio + timedelta(days=self.duracao_dias)
-
-    @property
-    def status_tratamento(self):
-        hoje = date.today()
-        return 'Concluído' if hoje > self.data_fim else 'Em andamento'
-
     def __str__(self):
         return f"{self.nome} - Pet: {self.pet.nome}"

@@ -1,3 +1,2 @@
-- [ ] Padronizar as views (tudo em português ou tudo em inglês)
 - [ ] Configurar o driver MySQL
 - [ ] Templates base para os CRUDs

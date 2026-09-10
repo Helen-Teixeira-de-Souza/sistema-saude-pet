@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Medicamento
 from .forms import MedicamentoForm
+from datetime import date, timedelta
 
 def listar_medicamentos(request):
     medicamentos = Medicamento.objects.select_related('pet', 'consulta').all()
@@ -8,7 +9,17 @@ def listar_medicamentos(request):
 
 def detalhe_medicamento(request, pk):
     medicamento = get_object_or_404(Medicamento, pk=pk)
-    return render(request, 'medicamento/medicamento_detail.html', {'medicamento': medicamento})
+    
+    data_fim = medicamento.data_inicio + timedelta(days=medicamento.duracao_dias)
+    hoje = date.today()
+    status_tratamento = 'Concluído' if hoje > data_fim else 'Em andamento'
+    
+    context = {
+        'medicamento': medicamento,
+        'data_fim': data_fim,
+        'status_tratamento': status_tratamento
+    }
+    return render(request, 'medicamento/medicamento_detail.html', context)
 
 def criar_medicamento(request):
     if request.method == 'POST':
