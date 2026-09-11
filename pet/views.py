@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Pet
 from .forms import PetForm
-from datatime import date
+from datetime import date
 
 # --- GESTÃO DO PET ---
 
