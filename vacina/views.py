@@ -1,61 +1,44 @@
-from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
-from django.urls import reverse
-
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Vacina
+from .forms import VacinaForm
 
 
-def listar_vacina(request):
-    vacina_list = Vacina.objects.all()
-    context = {"vacina_list": vacina_list}
-    return render(request, "vacina/vacina_list.html", context)
+def listar_vacinas(request):
+    vacinas = Vacina.objects.all()
+    return render(request, "vacina/vacina_list.html", {"vacina_list": vacinas})
 
 
-def detalhe_vacina(request, vacina_id):
-    vacina = get_object_or_404(Vacina, pk=vacina_id)
-    context = {"vacina": vacina}
-    return render(request, "vacina/vacina_detail.html", context)
+def detalhar_vacina(request, pk):
+    vacina = get_object_or_404(Vacina, pk=pk)
+    return render(request, "vacina/vacina_detail.html", {"vacina": vacina})
 
 
 def criar_vacina(request):
     if request.method == "POST":
-        nome = request.POST["nome"]
-        quantidade_dose = request.POST["quantidade_dose"]
-        intervalo_doses_dias = request.POST["intervalo_doses_dias"]
-        descricao = request.POST.get("descricao", "")
-
-        Vacina.objects.create(
-            nome=nome,
-            quantidade_dose=quantidade_dose,
-            intervalo_doses_dias=intervalo_doses_dias,
-            descricao=descricao,
-        )
-        return HttpResponseRedirect(reverse("vacina_list"))
-
-    return render(request, "vacina/vacina_form.html")
+        form = VacinaForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("vacina:listar_vacinas")
+    else:
+        form = VacinaForm()
+    return render(request, "vacina/vacina_form.html", {"form": form})
 
 
-def editar_vacina(request, vacina_id):
-    vacina = get_object_or_404(Vacina, pk=vacina_id)
-
+def editar_vacina(request, pk):
+    vacina = get_object_or_404(Vacina, pk=pk)
     if request.method == "POST":
-        vacina.nome = request.POST["nome"]
-        vacina.quantidade_dose = request.POST["quantidade_dose"]
-        vacina.intervalo_doses_dias = request.POST["intervalo_doses_dias"]
-        vacina.descricao = request.POST.get("descricao", "")
-        vacina.save()
-        return HttpResponseRedirect(reverse("vacina_detail", args=(vacina.id,)))
-
-    context = {"vacina": vacina}
-    return render(request, "vacina/vacina_form.html", context)
+        form = VacinaForm(request.POST, instance=vacina)
+        if form.is_valid():
+            form.save()
+            return redirect("vacina:detalhar_vacina", pk=vacina.id)
+    else:
+        form = VacinaForm(instance=vacina)
+    return render(request, "vacina/vacina_form.html", {"form": form, "vacina": vacina})
 
 
-def deletar_vacina(request, vacina_id):
-    vacina = get_object_or_404(Vacina, pk=vacina_id)
-
+def excluir_vacina(request, pk):
+    vacina = get_object_or_404(Vacina, pk=pk)
     if request.method == "POST":
         vacina.delete()
-        return HttpResponseRedirect(reverse("vacina_list"))
-
-    context = {"vacina": vacina}
-    return render(request, "vacina/vacina_confirm_delete.html", context)
+        return redirect("vacina:listar_vacinas")
+    return render(request, "vacina/vacina_confirm_delete.html", {"vacina": vacina})

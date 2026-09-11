@@ -3,11 +3,11 @@
 {% block content %}
     <h1>Cirurgias</h1>
 
-    {% if cirurgia_list %}
+    {% if listar_cirurgias %}
         <ul>
-        {% for cirurgia in cirurgia_list %}
+        {% for cirurgia in listar_cirurgias %}
             <li>
-                <a href="{% url 'cirurgia_detail' cirurgia.id %}">
+                <a href="{% url 'detalhar_cirurgia' cirurgia.id %}">
                     {{ cirurgia.pet.nome }} - {{ cirurgia.procedimento }} ({{ cirurgia.data }})
                 </a>
                 - local: {{ cirurgia.local }}
@@ -18,6 +18,6 @@
         <p>Nenhuma cirurgia registrada.</p>
     {% endif %}
 
-    <a href="{% url 'cirurgia_create' %}">Registrar nova cirurgia</a>
+    <a href="{% url 'criar_cirurgia' %}">Registrar nova cirurgia</a>
 
 {% endblock %}

@@ -6,7 +6,7 @@ app_name = 'medicamento'
 urlpatterns = [
     path('', views.listar_medicamentos, name='listar'),
     path('novo/', views.criar_medicamento, name='criar'),
-    path('<int:pk>/', views.detalhe_medicamento, name='detalhe'),
+    path('<int:pk>/', views.detalhar_medicamento, name='detalhar'),
     path('<int:pk>/editar/', views.editar_medicamento, name='editar'),
-    path('<int:pk>/deletar/', views.deletar_medicamento, name='deletar'),
+    path('<int:pk>/excluir/', views.excluir_medicamento, name='excluir'),
 ]

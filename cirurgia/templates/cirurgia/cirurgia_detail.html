@@ -9,7 +9,7 @@
     <p>Local: {{ cirurgia.local }}</p>
     <p>Cuidados pós-operatórios: {{ cirurgia.cuidados_pos_operatorios|default:"-" }}</p>
 
-    <a href="{% url 'cirurgia_update' cirurgia.id %}">Editar</a>
-    <a href="{% url 'cirurgia_delete' cirurgia.id %}">Excluir</a>
-    <a href="{% url 'cirurgia_list' %}">Voltar</a>
+    <a href="{% url 'editar_cirurgia' cirurgia.id %}">Editar</a>
+    <a href="{% url 'excluir_cirurgia' cirurgia.id %}">Excluir</a>
+    <a href="{% url 'listar_cirurgias' %}">Voltar</a>
 {% endblock %}

@@ -1,77 +1,33 @@
-from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
-from django.urls import reverse
-
-from pet.models import Pet
-from vacina.models import Vacina
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Vacinacao
+from .forms import VacinacaoForm
 
+def listar_vacinacoes(request):
+    vacinacoes = Vacinacao.objects.select_related("pet", "vacina").all()
+    return render(request, "vacinacao/vacinacao_list.html", {"vacinacao_list": vacinacoes})
 
-def listar_vacinacao(request):
-    vacinacao_list = Vacinacao.objects.all()
-    context = {"vacinacao_list": vacinacao_list}
-    return render(request, "vacinacao/vacinacao_list.html", context)
-
-
-def detalhe_vacinacao(request, vacinacao_id):
-    vacinacao = get_object_or_404(Vacinacao, pk=vacinacao_id)
-    context = {"vacinacao": vacinacao}
-    return render(request, "vacinacao/vacinacao_detail.html", context)
-
+def detalhar_vacinacao(request, pk):
+    vacinacao = get_object_or_404(Vacinacao, pk=pk)
+    return render(request, "vacinacao/vacinacao_detail.html", {"vacinacao": vacinacao})
 
 def criar_vacinacao(request):
-    if request.method == "POST":
-        pet = get_object_or_404(Pet, pk=request.POST["pet"])
-        vacina = get_object_or_404(Vacina, pk=request.POST["vacina"])
-        dose_atual = request.POST["dose_atual"]
-        data_aplicacao = request.POST["data_aplicacao"]
-        proxima_dose = request.POST.get("proxima_dose") or None
-        observacoes = request.POST.get("observacoes", "")
+    form = VacinacaoForm(request.POST or None)
+    if form.is_valid():
+        vacinacao = form.save()
+        return redirect("vacinacao:detalhar_vacinacao", pk=vacinacao.id)
+    return render(request, "vacinacao/vacinacao_form.html", {"form": form})
 
-        vacinacao = Vacinacao.objects.create(
-            pet=pet,
-            vacina=vacina,
-            dose_atual=dose_atual,
-            data_aplicacao=data_aplicacao,
-            proxima_dose=proxima_dose,
-            observacoes=observacoes,
-        )
-        return HttpResponseRedirect(reverse("vacinacao_detail", args=(vacinacao.id,)))
+def editar_vacinacao(request, pk):
+    vacinacao = get_object_or_404(Vacinacao, pk=pk)
+    form = VacinacaoForm(request.POST or None, instance=vacinacao)
+    if form.is_valid():
+        form.save()
+        return redirect("vacinacao:detalhar_vacinacao", pk=vacinacao.id)
+    return render(request, "vacinacao/vacinacao_form.html", {"form": form, "vacinacao": vacinacao})
 
-    context = {
-        "pet_list": Pet.objects.all(),
-        "vacina_list": Vacina.objects.all(),
-    }
-    return render(request, "vacinacao/vacinacao_form.html", context)
-
-
-def editar_vacinacao(request, vacinacao_id):
-    vacinacao = get_object_or_404(Vacinacao, pk=vacinacao_id)
-
-    if request.method == "POST":
-        vacinacao.pet = get_object_or_404(Pet, pk=request.POST["pet"])
-        vacinacao.vacina = get_object_or_404(Vacina, pk=request.POST["vacina"])
-        vacinacao.dose_atual = request.POST["dose_atual"]
-        vacinacao.data_aplicacao = request.POST["data_aplicacao"]
-        vacinacao.proxima_dose = request.POST.get("proxima_dose") or None
-        vacinacao.observacoes = request.POST.get("observacoes", "")
-        vacinacao.save()
-        return HttpResponseRedirect(reverse("vacinacao_detail", args=(vacinacao.id,)))
-
-    context = {
-        "vacinacao": vacinacao,
-        "pet_list": Pet.objects.all(),
-        "vacina_list": Vacina.objects.all(),
-    }
-    return render(request, "vacinacao/vacinacao_form.html", context)
-
-
-def deletar_vacinacao(request, vacinacao_id):
-    vacinacao = get_object_or_404(Vacinacao, pk=vacinacao_id)
-
+def excluir_vacinacao(request, pk):
+    vacinacao = get_object_or_404(Vacinacao, pk=pk)
     if request.method == "POST":
         vacinacao.delete()
-        return HttpResponseRedirect(reverse("vacinacao_list"))
-
-    context = {"vacinacao": vacinacao}
-    return render(request, "vacinacao/vacinacao_confirm_delete.html", context)
+        return redirect("vacinacao:listar_vacinacoes")
+    return render(request, "vacinacao/vacinacao_confirm_delete.html", {"vacinacao": vacinacao})

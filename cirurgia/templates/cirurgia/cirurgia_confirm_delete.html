@@ -5,10 +5,10 @@
 
     <p>Tem certeza que deseja excluir a cirurgia "{{ cirurgia.procedimento }}" do pet "{{ cirurgia.pet.nome }}"?</p>
 
-    <form action="{% url 'cirurgia_delete' cirurgia.id %}" method="post">
+    <form action="{% url 'excluir_cirurgia' cirurgia.id %}" method="post">
     {% csrf_token %}
     <input type="submit" value="Confirmar exclusão">
     </form>
 
-    <a href="{% url 'cirurgia_detail' cirurgia.id %}">Cancelar</a>
+    <a href="{% url 'detalhar_cirurgia' cirurgia.id %}">Cancelar</a>
 {% endblock %}

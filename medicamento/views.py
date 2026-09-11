@@ -7,7 +7,7 @@ def listar_medicamentos(request):
     medicamentos = Medicamento.objects.select_related('pet', 'consulta').all()
     return render(request, 'medicamento/medicamento_list.html', {'medicamentos': medicamentos})
 
-def detalhe_medicamento(request, pk):
+def detalhar_medicamento(request, pk):
     medicamento = get_object_or_404(Medicamento, pk=pk)
     
     data_fim = medicamento.data_inicio + timedelta(days=medicamento.duracao_dias)
@@ -37,12 +37,12 @@ def editar_medicamento(request, pk):
         form = MedicamentoForm(request.POST, instance=medicamento)
         if form.is_valid():
             form.save()
-            return redirect('medicamento:detalhe', pk=pk)
+            return redirect('medicamento:detalhar', pk=pk)
     else:
         form = MedicamentoForm(instance=medicamento)
     return render(request, 'medicamento/medicamento_form.html', {'form': form, 'titulo': 'Editar Medicamento', 'medicamento': medicamento})
 
-def deletar_medicamento(request, pk):
+def excluir_medicamento(request, pk):
     medicamento = get_object_or_404(Medicamento, pk=pk)
     if request.method == 'POST':
         medicamento.delete()
