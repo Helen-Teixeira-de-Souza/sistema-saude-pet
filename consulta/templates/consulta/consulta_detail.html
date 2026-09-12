@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Detalhes da Consulta</h2>
+    <ul class="list-group mb-3">
+        <li class="list-group-item"><strong>Pet:</strong> {{ consulta.pet }}</li>
+        <li class="list-group-item"><strong>Profissional:</strong> {% if consulta.profissional %}{{ consulta.profissional }}{% else %}Não informado{% endif %}</li>
+        <li class="list-group-item"><strong>Data da Consulta:</strong> {{ consulta.data }}</li>
+        <li class="list-group-item"><strong>Diagnóstico:</strong> {{ consulta.diagnostico }}</li>
+        <li class="list-group-item"><strong>Observações:</strong> {% if consulta.observacoes %}{{ consulta.observacoes }}{% else %}Nenhuma observação{% endif %}</li>
+    </ul>
+    <a href="{% url 'consulta_list' %}" class="btn btn-secondary">Voltar</a>
+</div>
+{% endblock %}

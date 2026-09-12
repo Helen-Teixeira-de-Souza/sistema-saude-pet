@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Detalhes do Exame</h2>
+    <ul class="list-group mb-3">
+        <li class="list-group-item"><strong>Pet:</strong> {{ exame.pet }}</li>
+        <li class="list-group-item"><strong>Nome do Exame:</strong> {{ exame.nome }}</li>
+        <li class="list-group-item"><strong>Data de Realização:</strong> {{ exame.data_realizacao }}</li>
+        <li class="list-group-item"><strong>Consulta de Origem:</strong> {% if exame.consulta %}{{ exame.consulta }}{% else %}Não vinculada{% endif %}</li>
+        <li class="list-group-item"><strong>Resultado:</strong> {% if exame.resultado %}{{ exame.resultado }}{% else %}Sem resultado informado{% endif %}</li>
+        <li class="list-group-item"><strong>Observações:</strong> {% if exame.observacoes %}{{ exame.observacoes }}{% else %}Nenhuma observação{% endif %}</li>
+    </ul>
+    <a href="{% url 'exame_list' %}" class="btn btn-secondary">Voltar</a>
+</div>
+{% endblock %}
