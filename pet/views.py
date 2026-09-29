@@ -70,3 +70,78 @@ def pet_delete(request, pk):
         'pet/pet_confirm_delete.html',
         {'pet': pet}
     )
+
+    # CREATE
+def cadastrar_pet(request):
+    if request.method == 'POST':
+        form = PetForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            return redirect('listar_pets')
+    else:
+        form = PetForm()
+
+    return render(
+        request,
+        'pet/cadastrar.html',
+        {'form': form}
+    )
+
+
+# READ
+def listar_pets(request):
+    pets = Pet.objects.all()
+
+    return render(
+        request,
+        'pet/listar.html',
+        {'pets': pets}
+    )
+
+
+# UPDATE
+def editar_pet(request, id):
+    pet = get_object_or_404(
+        Pet,
+        id=id
+    )
+
+    if request.method == 'POST':
+        form = PetForm(
+            request.POST,
+            instance=pet
+        )
+
+        if form.is_valid():
+            form.save()
+            return redirect('listar_pets')
+    else:
+        form = PetForm(
+            instance=pet
+        )
+
+    return render(
+        request,
+        'pet/editar.html',
+        {'form': form}
+    )
+
+
+# DELETE
+def excluir_pet(request, id):
+    pet = get_object_or_404(
+        Pet,
+        id=id
+    )
+
+    if request.method == 'POST':
+        pet.delete()
+        return redirect('listar_pets')
+
+    return render(
+        request,
+        'pet/excluir.html',
+        {'pet': pet}
+    )
+    

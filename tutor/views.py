@@ -38,3 +38,62 @@ def tutor_delete(request, pk):
         tutor.delete()
         return redirect('pet_list') # ou home
     return render(request, 'tutor/tutor_confirm_delete.html', {'tutor': tutor})
+
+# =========================
+# CRUD TUTOR
+# =========================
+
+def cadastrar_tutor(request):
+    if request.method == 'POST':
+        form = TutorForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            return redirect('listar_tutores')
+    else:
+        form = TutorForm()
+
+    return render(request, 'tutor/cadastrar.html', {'form': form})
+
+
+def listar_tutores(request):
+    tutores = Tutor.objects.all()
+
+    return render(
+        request,
+        'tutor/listar.html',
+        {'tutores': tutores}
+    )
+
+
+def editar_tutor(request, id):
+    tutor = get_object_or_404(Tutor, id=id)
+
+    if request.method == 'POST':
+        form = TutorForm(request.POST, instance=tutor)
+
+        if form.is_valid():
+            form.save()
+            return redirect('listar_tutores')
+    else:
+        form = TutorForm(instance=tutor)
+
+    return render(
+        request,
+        'tutor/editar.html',
+        {'form': form}
+    )
+
+
+def excluir_tutor(request, id):
+    tutor = get_object_or_404(Tutor, id=id)
+
+    if request.method == 'POST':
+        tutor.delete()
+        return redirect('listar_tutores')
+
+    return render(
+        request,
+        'tutor/excluir.html',
+        {'tutor': tutor}
+    )
