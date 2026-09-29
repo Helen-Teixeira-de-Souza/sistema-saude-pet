@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Detalhes do Tutor</h2>
+    <ul class="list-group mb-3">
+        <li class="list-group-item"><strong>Nome:</strong> {% if tutor.nome %}{{ tutor.nome }}{% else %}Não informado{% endif %}</li>
+        <li class="list-group-item"><strong>Usuário:</strong> {{ tutor.username }}</li>
+        <li class="list-group-item"><strong>E-mail:</strong> {% if tutor.email %}{{ tutor.email }}{% else %}Não informado{% endif %}</li>
+        <li class="list-group-item"><strong>Telefone:</strong> {% if tutor.telefone %}{{ tutor.telefone }}{% else %}Não informado{% endif %}</li>
+        <li class="list-group-item">
+            <strong>Pets:</strong>
+            {% for pet in pets %}
+                <a href="{% url 'pet_detail' pet.pk %}">{{ pet.nome }}</a> ({{ pet.especie }}){% if not forloop.last %}, {% endif %}
+            {% empty %}
+                Nenhum pet cadastrado
+            {% endfor %}
+        </li>
+    </ul>
+    <a href="{% url 'tutor_update' tutor.pk %}" class="btn btn-warning">Editar</a>
+    <a href="{% url 'tutor_list' %}" class="btn btn-secondary">Voltar</a>
+</div>
+{% endblock %}

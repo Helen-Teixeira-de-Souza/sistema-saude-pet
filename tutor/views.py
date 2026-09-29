@@ -97,3 +97,7 @@ def excluir_tutor(request, id):
         'tutor/excluir.html',
         {'tutor': tutor}
     )
+
+def tutor_list(request):
+    tutores = Tutor.objects.select_related('pet', 'profissional').all()
+    return render(request, "tutor/templates/tutor_list.html", {"tutor": tutor})

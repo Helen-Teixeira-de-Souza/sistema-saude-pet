@@ -1,7 +1,10 @@
 from django.urls import path
 from . import views
 
+app_name = 'tutor'
+
 urlpatterns = [
+    path('', views.tutor_list, name='tutor_list'),
     path('<int:pk>/', views.tutor_detail, name='tutor_detail'),
     path('novo/', views.tutor_create, name='tutor_create'),
     path('<int:pk>/editar/', views.tutor_update, name='tutor_update'),

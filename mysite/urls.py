@@ -11,6 +11,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_temporaria, name='home'),
     path('pet/', include('pet.urls')),
+    path('tutor/', include('tutor.urls')),
     path('vacinacao/', include('vacinacao.urls')),
     path('vacina/', include('vacina.urls')),
     path('cirurgia/', include('cirurgia.urls')),
