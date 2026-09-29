@@ -2,7 +2,7 @@
 
 {% block content %}
     <h2>Lista de Pets</h2>
-    <a href="{% url 'pet:pet_create' %}">+ Cadastrar Novo Pet</a>
+    <a href="{% url 'pet_create' %}">+ Cadastrar Novo Pet</a>
 
     <ul>
         {% for pet in pets %}
