@@ -7,7 +7,7 @@
         <ul>
         {% for cirurgia in listar_cirurgias %}
             <li>
-                <a href="{% url 'detalhar_cirurgia' cirurgia.id %}">
+                <a href="{% url 'cirurgia:detalhar' cirurgia.id %}">
                     {{ cirurgia.pet.nome }} - {{ cirurgia.procedimento }} ({{ cirurgia.data }})
                 </a>
                 - local: {{ cirurgia.local }}
@@ -18,6 +18,6 @@
         <p>Nenhuma cirurgia registrada.</p>
     {% endif %}
 
-    <a href="{% url 'criar_cirurgia' %}">Registrar nova cirurgia</a>
+    <a href="{% url 'cirurgia:criar' %}">Registrar nova cirurgia</a>
 
 {% endblock %}

@@ -1,147 +1,87 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from .models import Pet
-from .forms import PetForm
+from django.contrib.auth.decorators import login_required
 from datetime import date
+from django.shortcuts import get_object_or_404, redirect, render
+from .forms import PetForm
+from .models import Pet
+
 
 # --- GESTÃO DO PET ---
 
-def pet_list(request):
-    pets = Pet.objects.all()
-    return render(request, 'pet/pet_list.html', {'pets': pets})
-
-def pet_detail(request, pk):
-    pet = get_object_or_404(Pet, pk=pk)
-
-    # Cálculo da idade
-    hoje = date.today()
-    idade = hoje.year - pet.data_nascimento.year - (
-        (hoje.month, hoje.day) < (pet.data_nascimento.month, pet.data_nascimento.day)
-    )
-
-    context = {
-        'pet': pet,
-        'idade': idade,
-        'consultas': pet.consultas.all(),
-        'vacinacoes': pet.vacinacoes.all(),
-        'exames': pet.exames.all(),
-        'medicamentos': pet.medicamentos.all(),
-        'cirurgias': pet.cirurgias.all(),
-    }
-
-    return render(request, 'pet/pet_detail.html', context)
-
-def pet_create(request):
-    if request.method == 'POST':
-        form = PetForm(request.POST)
-
-        if form.is_valid():
-            pet = form.save()
-            return redirect('pet_detail', pk=pet.pk)
-
-    else:
-        form = PetForm()
-
-    return render(request, 'pet/pet_form.html', {'form': form})
-
-def pet_update(request, pk):
-    pet = get_object_or_404(Pet, pk=pk)
-
-    if request.method == 'POST':
-        form = PetForm(request.POST, instance=pet)
-
-        if form.is_valid():
-            pet = form.save()
-            return redirect('pet_detail', pk=pet.pk)
-
-    else:
-        form = PetForm(instance=pet)
-
-    return render(request, 'pet/pet_form.html', {'form': form, 'pet': pet})
-
-def pet_delete(request, pk):
-    pet = get_object_or_404(Pet, pk=pk)
-
-    if request.method == 'POST':
-        pet.delete()
-        return redirect('pet_list')
-
-    return render(
-        request,
-        'pet/pet_confirm_delete.html',
-        {'pet': pet}
-    )
-
-    # CREATE
-def cadastrar_pet(request):
-    if request.method == 'POST':
-        form = PetForm(request.POST)
-
-        if form.is_valid():
-            form.save()
-            return redirect('listar_pets')
-    else:
-        form = PetForm()
-
-    return render(
-        request,
-        'pet/cadastrar.html',
-        {'form': form}
-    )
-
-
-# READ
+# LISTAR
+@login_required
 def listar_pets(request):
-    pets = Pet.objects.all()
-
-    return render(
-        request,
-        'pet/listar.html',
-        {'pets': pets}
-    )
+  pets = Pet.objects.all()
+  return render(request, 'pet/pet_list.html', {'pets': pets})
 
 
-# UPDATE
-def editar_pet(request, id):
-    pet = get_object_or_404(
-        Pet,
-        id=id
-    )
+# DETALHAR
+@login_required
+def detalhar_pet(request, pk):
+  pet = get_object_or_404(Pet, pk=pk)
 
-    if request.method == 'POST':
-        form = PetForm(
-            request.POST,
-            instance=pet
-        )
+  # Cálculo da idade
+  hoje = date.today()
+  idade = (
+      hoje.year
+      - pet.data_nascimento.year
+      - (
+          (hoje.month, hoje.day)
+          < (pet.data_nascimento.month, pet.data_nascimento.day)
+      )
+  )
 
-        if form.is_valid():
-            form.save()
-            return redirect('listar_pets')
-    else:
-        form = PetForm(
-            instance=pet
-        )
+  context = {
+      'pet': pet,
+      'idade': idade,
+      'consultas': pet.consultas.all(),
+      'vacinacoes': pet.vacinacoes.all(),
+      'exames': pet.exames.all(),
+      'medicamentos': pet.medicamentos.all(),
+      'cirurgias': pet.cirurgias.all(),
+  }
 
-    return render(
-        request,
-        'pet/editar.html',
-        {'form': form}
-    )
+  return render(request, 'pet/pet_detail.html', context)
 
 
-# DELETE
-def excluir_pet(request, id):
-    pet = get_object_or_404(
-        Pet,
-        id=id
-    )
+# CRIAR
+@login_required
+def criar_pet(request):
+  if request.method == 'POST':
+    form = PetForm(request.POST)
 
-    if request.method == 'POST':
-        pet.delete()
-        return redirect('listar_pets')
+    if form.is_valid():
+      pet = form.save()
+      return redirect('pet:detalhar', pk=pet.pk)
+  else:
+    form = PetForm()
 
-    return render(
-        request,
-        'pet/excluir.html',
-        {'pet': pet}
-    )
-    
+  return render(request, 'pet/pet_form.html', {'form': form})
+
+
+# ATUALIZAR / EDITAR
+@login_required
+def editar_pet(request, pk):
+  pet = get_object_or_404(Pet, pk=pk)
+
+  if request.method == 'POST':
+    form = PetForm(request.POST, instance=pet)
+
+    if form.is_valid():
+      pet = form.save()
+      return redirect('pet:detalhar', pk=pet.pk)
+  else:
+    form = PetForm(instance=pet)
+
+  return render(request, 'pet/pet_form.html', {'form': form, 'pet': pet})
+
+
+# DELETAR / EXCLUIR
+@login_required
+def excluir_pet(request, pk):
+  pet = get_object_or_404(Pet, pk=pk)
+
+  if request.method == 'POST':
+    pet.delete()
+    return redirect('pet:listar')
+
+  return render(request, 'pet/pet_confirm_delete.html', {'pet': pet})

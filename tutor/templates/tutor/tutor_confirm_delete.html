@@ -9,7 +9,7 @@
     <form method="post">
         {% csrf_token %}
         <button type="submit" class="btn btn-danger">Sim, excluir</button>
-        <a href="{% url 'tutor_list' %}" class="btn btn-secondary">Cancelar</a>
+        <a href="{% url 'tutor:listar' %}" class="btn btn-secondary">Cancelar</a>
     </form>
 </div>
 {% endblock %}

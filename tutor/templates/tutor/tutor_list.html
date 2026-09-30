@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container mt-4">
     <h2>Lista de Tutores</h2>
-    <a href="{% url 'tutor_create' %}" class="btn btn-primary mb-3">Novo Tutor</a>
+    <a href="{% url 'tutor:criar' %}" class="btn btn-primary mb-3">Novo Tutor</a>
 
     <table class="table table-striped">
         <thead>
@@ -25,9 +25,9 @@
                 <td>{% if tutor.telefone %}{{ tutor.telefone }}{% else %}Não informado{% endif %}</td>
                 <td>{{ tutor.total_pets }}</td>
                 <td>
-                    <a href="{% url 'tutor_detail' tutor.pk %}" class="btn btn-info btn-sm">Ver</a>
-                    <a href="{% url 'tutor_update' tutor.pk %}" class="btn btn-warning btn-sm">Editar</a>
-                    <a href="{% url 'tutor_delete' tutor.pk %}" class="btn btn-danger btn-sm">Excluir</a>
+                    <a href="{% url 'tutor:detalhar' tutor.pk %}" class="btn btn-info btn-sm">Ver</a>
+                    <a href="{% url 'tutor:editar' tutor.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                    <a href="{% url 'tutor:excluir' tutor.pk %}" class="btn btn-danger btn-sm">Excluir</a>
                 </td>
             </tr>
             {% empty %}

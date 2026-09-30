@@ -10,6 +10,6 @@
         <li class="list-group-item"><strong>Diagnóstico:</strong> {{ consulta.diagnostico }}</li>
         <li class="list-group-item"><strong>Observações:</strong> {% if consulta.observacoes %}{{ consulta.observacoes }}{% else %}Nenhuma observação{% endif %}</li>
     </ul>
-    <a href="{% url 'consulta_list' %}" class="btn btn-secondary">Voltar</a>
+    <a href="{% url 'consulta:listar' %}" class="btn btn-secondary">Voltar</a>
 </div>
 {% endblock %}

@@ -1,10 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
 <h1>Medicamentos</h1>
 
 {% if medicamento_list %}
     <ul>
     {% for medicamento in medicamento_list %}
         <li>
-            <a href="{% url 'medicamento_detail' medicamento.id %}">
+            <a href="{% url 'medicamento:detalhar' medicamento.id %}">
                 {{ medicamento.pet.nome }} - {{ medicamento.nome }}
             </a>
             ({{ medicamento.dosagem }}, {{ medicamento.frequencia }}) - status: {{ medicamento.status_tratamento }}
@@ -15,4 +18,6 @@
     <p>Nenhum medicamento registrado.</p>
 {% endif %}
 
-<a href="{% url 'medicamento_create' %}">Registrar novo medicamento</a>
+<a href="{% url 'medicamento:criar' %}">Registrar novo medicamento</a>
+
+{% endblock %}

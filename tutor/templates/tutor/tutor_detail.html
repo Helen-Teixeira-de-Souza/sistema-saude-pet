@@ -11,13 +11,13 @@
         <li class="list-group-item">
             <strong>Pets:</strong>
             {% for pet in pets %}
-                <a href="{% url 'pet_detail' pet.pk %}">{{ pet.nome }}</a> ({{ pet.especie }}){% if not forloop.last %}, {% endif %}
+                <a href="{% url 'tutor:detalhar_pet' pet.pk %}">{{ pet.nome }}</a> ({{ pet.especie }}){% if not forloop.last %}, {% endif %}
             {% empty %}
                 Nenhum pet cadastrado
             {% endfor %}
         </li>
     </ul>
-    <a href="{% url 'tutor_update' tutor.pk %}" class="btn btn-warning">Editar</a>
-    <a href="{% url 'tutor_list' %}" class="btn btn-secondary">Voltar</a>
+    <a href="{% url 'tutor:editar' tutor.pk %}" class="btn btn-warning">Editar</a>
+    <a href="{% url 'tutor:listar' %}" class="btn btn-secondary">Voltar</a>
 </div>
 {% endblock %}

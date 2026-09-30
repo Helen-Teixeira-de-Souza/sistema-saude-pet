@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h2>Detalhes de {{ profissional.nome }}</h2>
+        </div>
+        <div class="card-body">
+            <p><strong>Nome:</strong> {{ profissional.nome }}</p>
+            <p><strong>Especialidade:</strong> {{ profissional.especialidade }}</p>
+            <p><strong>Telefone:</strong> {{ profissional.telefone }}</p>
+
+            <div class="mt-4">
+                <a href="{% url 'profissional:listar' %}" class="btn btn-secondary">Voltar</a>
+                <a href="{% url 'profissional:editar' profissional.id %}" class="btn btn-warning">Editar</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

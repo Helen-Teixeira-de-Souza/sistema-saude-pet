@@ -1,6 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
 <h1>{% if medicamento %}Editar{% else %}Registrar{% endif %} Medicamento</h1>
 
-<form action="{% if medicamento %}{% url 'medicamento_update' medicamento.id %}{% else %}{% url 'medicamento_create' %}{% endif %}" method="post">
+<form action="{% if medicamento %}{% url 'medicamento:editar' medicamento.id %}{% else %}{% url 'medicamento:criar' %}{% endif %}" method="post">
 {% csrf_token %}
 <p>
     <label for="pet">Pet:</label>
@@ -41,3 +45,5 @@
 </p>
 <input type="submit" value="Salvar">
 </form>
+
+{% endblock %}

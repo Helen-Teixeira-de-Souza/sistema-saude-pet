@@ -10,7 +10,7 @@
     <p>Status: {{ vacinacao.status_alerta }}</p>
     <p>Observações: {{ vacinacao.observacoes|default:"-" }}</p>
 
-    <a href="{% url 'vacinacao_update' vacinacao.id %}">Editar</a>
-    <a href="{% url 'vacinacao_delete' vacinacao.id %}">Excluir</a>
-    <a href="{% url 'vacinacao_list' %}">Voltar</a>
+    <a href="{% url 'vacinacao:editar' vacinacao.id %}">Editar</a>
+    <a href="{% url 'vacinacao:excluir' vacinacao.id %}">Excluir</a>
+    <a href="{% url 'vacinacao:listar' %}">Voltar</a>
 {% endblock %}

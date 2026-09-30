@@ -7,7 +7,7 @@
         <ul>
         {% for vacina in vacina_list %}
             <li>
-                <a href="{% url 'vacina_detail' vacina.id %}">{{ vacina.nome }}</a>
+                <a href="{% url 'vacina:detalhar' vacina.id %}">{{ vacina.nome }}</a>
                 - {{ vacina.quantidade_dose }} dose(s) - intervalo {{ vacina.intervalo_doses_dias }} dia(s)
             </li>
         {% endfor %}
@@ -16,5 +16,5 @@
         <p>Nenhuma vacina cadastrada.</p>
     {% endif %}
 
-    <a href="{% url 'vacina_create' %}">Cadastrar nova vacina</a>
+    <a href="{% url 'vacina:criar' %}">Cadastrar nova vacina</a>
 {% endblock %}

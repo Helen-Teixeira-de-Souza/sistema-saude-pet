@@ -1,10 +1,12 @@
 from django.urls import path
 from . import views
 
+app_name = 'pet'
+
 urlpatterns = [
-    path('', views.pet_list, name='pet_list'),
-    path('<int:pk>/', views.pet_detail, name='pet_detail'),
-    path('novo/', views.pet_create, name='pet_create'),
-    path('<int:pk>/editar/', views.pet_update, name='pet_update'),
-    path('<int:pk>/deletar/', views.pet_delete, name='pet_delete'),
+    path('', views.listar_pets, name='listar'),
+    path('<int:pk>/', views.detalhar_pet, name='detalhar'),
+    path('novo/', views.criar_pet, name='criar'),
+    path('<int:pk>/editar/', views.editar_pet, name='editar'),
+    path('<int:pk>/deletar/', views.excluir_pet, name='excluir'),
 ]

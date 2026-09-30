@@ -1,12 +1,15 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Medicamento
 from .forms import MedicamentoForm
 from datetime import date, timedelta
 
+@login_required
 def listar_medicamentos(request):
     medicamentos = Medicamento.objects.select_related('pet', 'consulta').all()
     return render(request, 'medicamento/medicamento_list.html', {'medicamentos': medicamentos})
 
+@login_required
 def detalhar_medicamento(request, pk):
     medicamento = get_object_or_404(Medicamento, pk=pk)
     
@@ -21,6 +24,7 @@ def detalhar_medicamento(request, pk):
     }
     return render(request, 'medicamento/medicamento_detail.html', context)
 
+@login_required
 def criar_medicamento(request):
     if request.method == 'POST':
         form = MedicamentoForm(request.POST)
@@ -31,6 +35,7 @@ def criar_medicamento(request):
         form = MedicamentoForm()
     return render(request, 'medicamento/medicamento_form.html', {'form': form, 'titulo': 'Cadastrar Medicamento'})
 
+@login_required
 def editar_medicamento(request, pk):
     medicamento = get_object_or_404(Medicamento, pk=pk)
     if request.method == 'POST':
@@ -42,6 +47,8 @@ def editar_medicamento(request, pk):
         form = MedicamentoForm(instance=medicamento)
     return render(request, 'medicamento/medicamento_form.html', {'form': form, 'titulo': 'Editar Medicamento', 'medicamento': medicamento})
 
+
+@login_required
 def excluir_medicamento(request, pk):
     medicamento = get_object_or_404(Medicamento, pk=pk)
     if request.method == 'POST':

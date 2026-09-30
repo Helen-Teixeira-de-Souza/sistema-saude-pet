@@ -2,15 +2,15 @@
 
 {% block content %}
     <h2>Lista de Pets</h2>
-    <a href="{% url 'pet_create' %}">+ Cadastrar Novo Pet</a>
+    <a href="{% url 'pet:criar' %}">+ Cadastrar Novo Pet</a>
 
     <ul>
         {% for pet in pets %}
             <li>
                 <strong>{{ pet.nome }}</strong> - {{ pet.especie }} (Tutor: {{ pet.tutor.nome }})
-                <a href="{% url 'pet:pet_detail' pet.pk %}">Detalhes</a> |
-                <a href="{% url 'pet:pet_update' pet.pk %}">Editar</a> |
-                <a href="{% url 'pet:pet_delete' pet.pk %}">Deletar</a>
+                <a href="{% url 'pet:detalhar' pet.pk %}">Detalhes</a> |
+                <a href="{% url 'pet:editar' pet.pk %}">Editar</a> |
+                <a href="{% url 'pet:excluir' pet.pk %}">Deletar</a>
             </li>
         {% empty %}
             <li>Nenhum pet cadastrado até o momento.</li>

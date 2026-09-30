@@ -3,7 +3,7 @@
 {% block content %}
     <h1>{% if vacina %}Editar{% else %}Cadastrar{% endif %} Vacina</h1>
 
-    <form action="{% if vacina %}{% url 'vacina_update' vacina.id %}{% else %}{% url 'vacina_create' %}{% endif %}" method="post">
+    <form action="{% if vacina %}{% url 'vacina:editar' vacina.id %}{% else %}{% url 'vacina:criar' %}{% endif %}" method="post">
     {% csrf_token %}
     <p>
         <label for="nome">Nome:</label>
