@@ -129,4 +129,4 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 # Autenticação
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = 'pet:listar'
-LOGOUT_REDIRECT_URL = '/login/'
+LOGOUT_REDIRECT_URL = 'login'

@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Medicamento
 from .forms import MedicamentoForm
@@ -24,6 +24,7 @@ def detalhar_medicamento(request, pk):
     }
     return render(request, 'medicamento/medicamento_detail.html', context)
 
+@permission_required('medicamento.add_medicamento', login_url='/login/')
 @login_required
 def criar_medicamento(request):
     if request.method == 'POST':
@@ -35,19 +36,22 @@ def criar_medicamento(request):
         form = MedicamentoForm()
     return render(request, 'medicamento/medicamento_form.html', {'form': form, 'titulo': 'Cadastrar Medicamento'})
 
+@permission_required('medicamento.change_medicamento', login_url='/login/')
 @login_required
 def editar_medicamento(request, pk):
     medicamento = get_object_or_404(Medicamento, pk=pk)
+
     if request.method == 'POST':
         form = MedicamentoForm(request.POST, instance=medicamento)
         if form.is_valid():
-            form.save()
+            medicamento = form.save()
             return redirect('medicamento:detalhar', pk=pk)
     else:
         form = MedicamentoForm(instance=medicamento)
-    return render(request, 'medicamento/medicamento_form.html', {'form': form, 'titulo': 'Editar Medicamento', 'medicamento': medicamento})
 
+    return render(request, 'medicamento/medicamento_form.html', {'form': form, 'medicamento': medicamento})
 
+@permission_required('medicamento.delete_medicamento', login_url='/login/')
 @login_required
 def excluir_medicamento(request, pk):
     medicamento = get_object_or_404(Medicamento, pk=pk)

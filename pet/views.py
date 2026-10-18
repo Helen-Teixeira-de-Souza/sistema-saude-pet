@@ -8,14 +8,14 @@ from .models import Pet
 # --- GESTÃO DO PET ---
 
 # LISTAR
-@login_required
+@login_required(login_url='/login/')
 def listar_pets(request):
   pets = Pet.objects.all()
   return render(request, 'pet/pet_list.html', {'pets': pets})
 
 
 # DETALHAR
-@login_required
+@login_required(login_url='/login/')
 def detalhar_pet(request, pk):
   pet = get_object_or_404(Pet, pk=pk)
 
@@ -44,7 +44,7 @@ def detalhar_pet(request, pk):
 
 
 # CRIAR
-@login_required
+@login_required(login_url='/login/')
 def criar_pet(request):
   if request.method == 'POST':
     form = PetForm(request.POST)
@@ -59,7 +59,7 @@ def criar_pet(request):
 
 
 # ATUALIZAR / EDITAR
-@login_required
+@login_required(login_url='/login/')
 def editar_pet(request, pk):
   pet = get_object_or_404(Pet, pk=pk)
 
@@ -76,7 +76,7 @@ def editar_pet(request, pk):
 
 
 # DELETAR / EXCLUIR
-@login_required
+@login_required(login_url='/login/')
 def excluir_pet(request, pk):
   pet = get_object_or_404(Pet, pk=pk)
 
