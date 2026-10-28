@@ -7,7 +7,7 @@ Sistema de gerenciamento de saúde animal desenvolvido em Django, com o objetivo
 # Tecnologias
 
 - Django
-- Python
+- Pythons
 - HTML
 - CSS
 - JavaScript
