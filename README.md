@@ -13,12 +13,13 @@ Sistema de gerenciamento de saúde animal desenvolvido em Django. O objetivo é 
 - JavaScript
 - MySQL
 - Bootstrap
+- XAMPP
 
 ## Como executar o projeto
 
 ### Pré-requisitos
 
-* Ter Python e Django instalados em sua máquina
+* Ter Python, Django e XAMPP instalados em sua máquina
 
 ### 1. Clone o repositório:
 
