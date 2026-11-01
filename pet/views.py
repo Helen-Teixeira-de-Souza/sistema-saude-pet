@@ -1,9 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from datetime import date
 from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib import messages
 from .forms import PetForm
 from .models import Pet
-
 
 # --- GESTÃO DO PET ---
 
@@ -51,7 +51,10 @@ def criar_pet(request):
 
     if form.is_valid():
       pet = form.save()
+      messages.success(request, f'Pet "{pet.nome}" cadastrado com sucesso!')
       return redirect('pet:detalhar', pk=pet.pk)
+    else:
+      messages.error(request, 'Erro ao cadastrar o pet. Verifique os dados informados.')
   else:
     form = PetForm()
 
@@ -68,7 +71,10 @@ def editar_pet(request, pk):
 
     if form.is_valid():
       pet = form.save()
+      messages.success(request, f'Pet "{pet.nome}" atualizado com sucesso!')
       return redirect('pet:detalhar', pk=pet.pk)
+    else:
+      messages.error(request, 'Erro ao atualizar o pet. Verifique os dados informados.')
   else:
     form = PetForm(instance=pet)
 
@@ -82,6 +88,7 @@ def excluir_pet(request, pk):
 
   if request.method == 'POST':
     pet.delete()
+    messages.warning(request, f'O pet "{pet.nome}" foi removido do sistema.')
     return redirect('pet:listar')
 
   return render(request, 'pet/pet_confirm_delete.html', {'pet': pet})
