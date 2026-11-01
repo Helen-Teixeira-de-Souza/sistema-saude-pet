@@ -1,18 +1,24 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib.admin.views.decorators import staff_member_required
 from .forms import TutorForm
 from .models import Tutor
-
+from pet.models import Pet
+from consulta.models import Consulta
+from vacinacao.models import Vacinacao
+from cirurgia.models import Cirurgia
+from exame.models import Exame
+from medicamento.models import Medicamento
 
 # LISTAR
-@login_required
+@staff_member_required(login_url='/login/')
 def listar_tutores(request):
   tutores = Tutor.objects.all()
   return render(request, 'tutor/tutor_list.html', {'tutores': tutores})
 
 
 # DETALHAR
-@login_required
+@staff_member_required(login_url='/login/')
 def detalhar_tutor(request, pk):
   tutor = get_object_or_404(Tutor, pk=pk)
   pets = tutor.pets.all()
@@ -20,7 +26,7 @@ def detalhar_tutor(request, pk):
 
 
 # CADASTRAR (Criar)
-@login_required
+@staff_member_required(login_url='/login/')
 def criar_tutor(request):
   if request.method == 'POST':
     form = TutorForm(request.POST)
@@ -50,7 +56,7 @@ def editar_tutor(request, pk):
 
 
 # EXCLUIR (Deletar)
-@login_required
+@staff_member_required(login_url='/login/')
 def excluir_tutor(request, pk):
   tutor = get_object_or_404(Tutor, pk=pk)
 
@@ -59,3 +65,32 @@ def excluir_tutor(request, pk):
     return redirect('tutor:listar')
 
   return render(request, 'tutor/tutor_confirm_delete.html', {'tutor': tutor})
+
+# Dashboard do tutor
+@login_required(login_url='/login/')
+def dashboard_tutor(request):
+
+    if request.user.is_staff:
+        return render(request, 'tutor/admin_dashboard.html')
+        # essa pagina admin_dashboard.html nao existe ainda
+
+    # Filtra os pets pertencentes ao usuário logado
+    meus_pets = Pet.objects.filter(tutor=request.user)
+    
+    # Busca o histórico de saúde completo associado a esses pets
+    minhas_consultas = Consulta.objects.filter(pet__in=meus_pets)
+    meus_exames = Exame.objects.filter(pet__in=meus_pets)
+    meus_medicamentos = Medicamento.objects.filter(pet__in=meus_pets)
+    minhas_vacinacoes = Vacinacao.objects.filter(pet__in=meus_pets)
+    minhas_cirurgias = Cirurgia.objects.filter(pet__in=meus_pets)
+    
+    context = {
+        'pets': meus_pets,
+        'consultas': minhas_consultas,
+        'exames': meus_exames,
+        'medicamentos': meus_medicamentos,
+        'vacinacoes': minhas_vacinacoes,
+        'cirurgias': minhas_cirurgias,
+    }
+    return render(request, 'tutor/dashboard.html', context)
+# essa pagina dashboard.html nao existe ainda

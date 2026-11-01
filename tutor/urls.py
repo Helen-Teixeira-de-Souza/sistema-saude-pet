@@ -9,4 +9,5 @@ urlpatterns = [
     path('novo/', views.criar_tutor, name='criar'),
     path('<int:pk>/editar/', views.editar_tutor, name='editar'),
     path('<int:pk>/deletar/', views.excluir_tutor, name='excluir'),
+    path('dashboard/', views.dashboard_tutor, name='dashboard'),
 ]

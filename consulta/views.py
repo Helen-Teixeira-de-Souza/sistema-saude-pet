@@ -25,7 +25,7 @@ def criar_consulta(request):
         form = ConsultaForm(request.POST)
         if form.is_valid():
             consulta = form.save()
-            messages.success(request, f'Consulta do pet "{consulta.pet.nome}" registrada com sucesso!')
+            messages.success(request, f'Consulta registrada com sucesso!')
             return redirect('consulta:listar')
         else:
             messages.error(request, 'Erro ao registrar a consulta. Verifique os dados informados.')
@@ -50,7 +50,7 @@ def editar_consulta(request, pk):
         form = ConsultaForm(request.POST, instance=consulta)
         if form.is_valid():
             consulta = form.save()
-            messages.success(request, f'Consulta do pet "{consulta.pet.nome}" atualizada com sucesso!')
+            messages.success(request, f'Consulta atualizada com sucesso!')
             return redirect('consulta:detalhar', pk=consulta.pk)
         else:
             messages.error(request, 'Erro ao atualizar a consulta. Verifique os dados informados.')

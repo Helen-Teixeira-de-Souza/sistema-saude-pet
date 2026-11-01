@@ -136,3 +136,6 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = 'pet:listar'
 LOGOUT_REDIRECT_URL = 'login'
+
+# Imprime os e-mails de redefinição de senha diretamente no terminal (para testar)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

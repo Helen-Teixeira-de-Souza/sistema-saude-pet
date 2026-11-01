@@ -2,21 +2,22 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Vacina
 from .forms import VacinaForm
+from django.contrib.admin.views.decorators import staff_member_required
 
 
-@login_required
+@staff_member_required(login_url='/login/')
 def listar_vacinas(request):
     vacinas = Vacina.objects.all()
     return render(request, "vacina/vacina_list.html", {"vacina_list": vacinas})
 
-
+@staff_member_required(login_url='/login/')
 @login_required
 def detalhar_vacina(request, pk):
     vacina = get_object_or_404(Vacina, pk=pk)
     return render(request, "vacina/vacina_detail.html", {"vacina": vacina})
 
 
-@login_required
+@staff_member_required(login_url='/login/')
 def criar_vacina(request):
     if request.method == "POST":
         form = VacinaForm(request.POST)
@@ -28,7 +29,7 @@ def criar_vacina(request):
     return render(request, "vacina/vacina_form.html", {"form": form})
 
 
-@login_required
+@staff_member_required(login_url='/login/')
 def editar_vacina(request, pk):
     vacina = get_object_or_404(Vacina, pk=pk)
     if request.method == "POST":
@@ -41,7 +42,7 @@ def editar_vacina(request, pk):
     return render(request, "vacina/vacina_form.html", {"form": form, "vacina": vacina})
 
 
-@login_required
+@staff_member_required(login_url='/login/')
 def excluir_vacina(request, pk):
     vacina = get_object_or_404(Vacina, pk=pk)
     if request.method == "POST":

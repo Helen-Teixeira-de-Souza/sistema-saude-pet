@@ -39,9 +39,10 @@
         class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
         id="accordionSidebar"
       >
+        <!-- Logo do Sistema -->
         <a
           class="sidebar-brand d-flex align-items-center justify-content-center"
-          href="{% url 'home' %}"
+          href="{% if request.user.is_staff %}/admin/{% else %}{% url 'tutor:dashboard' %}{% endif %}"
         >
           <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-paw"></i>
@@ -51,13 +52,15 @@
 
         <hr class="sidebar-divider my-0" />
 
-        <!-- Nav Item - Dashboard / Home -->
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'home' %}">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span>
-          </a>
-        </li>
+        <!-- Dashboard / Home para Tutor Comum -->
+        {% if not request.user.is_staff %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'tutor:dashboard' %}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+        {% endif %}
 
         <hr class="sidebar-divider" />
 
@@ -78,19 +81,25 @@
           </a>
         </li>
 
+    <!-- Link acessível apenas por Administradores -->
+    {% if request.user.is_staff %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'tutor:listar' %}">
             <i class="fas fa-fw fa-user"></i>
             <span>Tutores</span>
           </a>
         </li>
+    {% endif %}
 
+    <!-- Link acessível apenas por Administradores -->
+    {% if request.user.is_staff %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'vacina:listar' %}">
             <i class="fas fa-fw fa-syringe"></i>
             <span>Vacinas</span>
           </a>
         </li>
+    {% endif %}
 
         <li class="nav-item">
           <a class="nav-link" href="{% url 'exame:listar' %}">
@@ -141,7 +150,7 @@
 
       <!-- Content Wrapper -->
       <div id="content-wrapper" class="d-flex flex-column">
-        
+
         <!-- Exibição de mensagens de feedback -->
         {% if messages %}
         <div class="container mt-3">
@@ -151,12 +160,6 @@
             role="alert"
           >
             {{ message }}
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="alert"
-              aria-label="Close"
-            ></button>
           </div>
           {% endfor %}
         </div>
