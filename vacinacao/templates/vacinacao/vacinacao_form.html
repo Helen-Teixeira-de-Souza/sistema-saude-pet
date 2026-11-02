@@ -1,42 +1,32 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>{% if vacinacao %}Editar{% else %}Registrar{% endif %} Vacinação</h1>
+<div class="container mt-4">
+    <h1 class="h3 mb-4 text-gray-800">{% if vacinacao %}Editar Vacinação{% else %}Registrar Vacinação{% endif %}</h1>
 
-    <form action="{% if vacinacao %}{% url 'vacinacao:editar' vacinacao.id %}{% else %}{% url 'vacinacao:criar' %}{% endif %}" method="post">
-    {% csrf_token %}
-    <p>
-        <label for="pet">Pet:</label>
-        <select name="pet" id="pet">
-            {% for pet in pet_list %}
-            <option value="{{ pet.id }}" {% if vacinacao.pet_id == pet.id %}selected{% endif %}>{{ pet.nome }}</option>
-            {% endfor %}
-        </select>
-    </p>
-    <p>
-        <label for="vacina">Vacina:</label>
-        <select name="vacina" id="vacina">
-            {% for vacina in vacina_list %}
-            <option value="{{ vacina.id }}" {% if vacinacao.vacina_id == vacina.id %}selected{% endif %}>{{ vacina.nome }}</option>
-            {% endfor %}
-        </select>
-    </p>
-    <p>
-        <label for="dose_atual">Dose atual:</label>
-        <input type="number" name="dose_atual" id="dose_atual" value="{{ vacinacao.dose_atual|default:1 }}">
-    </p>
-    <p>
-        <label for="data_aplicacao">Data de aplicação:</label>
-        <input type="date" name="data_aplicacao" id="data_aplicacao" value="{{ vacinacao.data_aplicacao|date:'Y-m-d'|default:'' }}">
-    </p>
-    <p>
-        <label for="proxima_dose">Próxima dose:</label>
-        <input type="date" name="proxima_dose" id="proxima_dose" value="{{ vacinacao.proxima_dose|date:'Y-m-d'|default:'' }}">
-    </p>
-    <p>
-        <label for="observacoes">Observações:</label><br>
-        <textarea name="observacoes" id="observacoes">{{ vacinacao.observacoes|default:'' }}</textarea>
-    </p>
-    <input type="submit" value="Salvar">
-    </form>
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <form method="post" novalidate>
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+                {% endif %}
+
+                {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% for erro in field.errors %}
+                    <div class="text-danger small">{{ erro }}</div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+
+                <button type="submit" class="btn btn-primary">Salvar</button>
+                <a href="{% if vacinacao %}VOLTAR_Editar Vacinação{% else %}VOLTAR_Registrar Vacinação{% endif %}" class="btn btn-secondary">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

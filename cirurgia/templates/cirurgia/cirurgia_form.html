@@ -1,43 +1,32 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>{% if cirurgia %}Editar{% else %}Registrar{% endif %} Cirurgia</h1>
+<div class="container mt-4">
+    <h1 class="h3 mb-4 text-gray-800">{% if cirurgia %}Editar Cirurgia{% else %}Registrar Cirurgia{% endif %}</h1>
 
-    <form action="{% if cirurgia %}{% url 'cirurgia:editar' cirurgia.id %}{% else %}{% url 'cirurgia:criar' %}{% endif %}" method="post">
-    {% csrf_token %}
-    <p>
-        <label for="pet">Pet:</label>
-        <select name="pet" id="pet">
-            {% for pet in pet_list %}
-            <option value="{{ pet.id }}" {% if cirurgia.pet_id == pet.id %}selected{% endif %}>{{ pet.nome }}</option>
-            {% endfor %}
-        </select>
-    </p>
-    <p>
-        <label for="profissional">Profissional responsável:</label>
-        <select name="profissional" id="profissional">
-            <option value="">-- Nenhum --</option>
-            {% for profissional in profissional_list %}
-            <option value="{{ profissional.id }}" {% if cirurgia.profissional_id == profissional.id %}selected{% endif %}>{{ profissional.nome }}</option>
-            {% endfor %}
-        </select>
-    </p>
-    <p>
-        <label for="procedimento">Procedimento:</label>
-        <input type="text" name="procedimento" id="procedimento" value="{{ cirurgia.procedimento|default:'' }}">
-    </p>
-    <p>
-        <label for="data">Data da cirurgia:</label>
-        <input type="date" name="data" id="data" value="{{ cirurgia.data|date:'Y-m-d'|default:'' }}">
-    </p>
-    <p>
-        <label for="local">Local:</label>
-        <input type="text" name="local" id="local" value="{{ cirurgia.local|default:'' }}">
-    </p>
-    <p>
-        <label for="cuidados_pos_operatorios">Cuidados pós-operatórios:</label><br>
-        <textarea name="cuidados_pos_operatorios" id="cuidados_pos_operatorios">{{ cirurgia.cuidados_pos_operatorios|default:'' }}</textarea>
-    </p>
-    <input type="submit" value="Salvar">
-    </form>
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <form method="post" novalidate>
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+                {% endif %}
+
+                {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% for erro in field.errors %}
+                    <div class="text-danger small">{{ erro }}</div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+
+                <button type="submit" class="btn btn-primary">Salvar</button>
+                <a href="{% if cirurgia %}VOLTAR_Editar Cirurgia{% else %}VOLTAR_Registrar Cirurgia{% endif %}" class="btn btn-secondary">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}
