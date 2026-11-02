@@ -24,8 +24,8 @@
                 {% endfor %}
 
                 <button type="submit" class="btn btn-primary">Salvar</button>
-                <a href="{% if cirurgia %}VOLTAR_Editar Cirurgia{% else %}VOLTAR_Registrar Cirurgia{% endif %}" class="btn btn-secondary">Cancelar</a>
-            </form>
+                <a href="{% url 'cirurgia:listar' %}" class="btn btn-secondary">Cancelar</a>
+         </form>
         </div>
     </div>
 </div>

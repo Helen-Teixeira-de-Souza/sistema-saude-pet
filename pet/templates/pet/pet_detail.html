@@ -15,6 +15,7 @@
 
             <div class="mt-4">
                 <a href="{% url 'pet:listar' %}" class="btn btn-secondary">Voltar para a Lista</a>
+                <a href="{% url 'pet:historico' pet.id %}" class="btn btn-info">Histórico de Saúde</a>
                 <a href="{% url 'pet:editar' pet.id %}" class="btn btn-warning">Editar</a>
                 <a href="{% url 'pet:excluir' pet.id %}" class="btn btn-danger">Excluir</a>
             </div>
