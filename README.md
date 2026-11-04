@@ -1,6 +1,6 @@
 # Sistema de Saúde Pet
 
-Sistema de gerenciamento de saúde animal desenvolvido em Django. O objetivo é permitir que tutores acompanhem o histórico clínico de seus pets (consultas, vacinas, exames, cirurgias e medicamentos).
+Sistema de gerenciamento de saúde animal desenvolvido em Django, com o objetivo de facilitar o cadastro de pets e o acompanhamento de seu histórico clínico, reunindo informações sobre consultas, vacinas, exames, cirurgias e medicamentos.
 
 > Projeto desenvolvido para as disciplinas PCC e PSW.
 
@@ -36,6 +36,18 @@ python manage.py runserver
 ### 4. Acesse o sistema no navegador:
 
 http://127.0.0.1:8000/
+
+## Funcionalidades do sistema
+
+- Gerenciamento de tutores;
+- Gerenciamento de profissionais;
+- Gerenciamento de pets;
+- Registro de consultas;
+- Registro de vacinas e vacinações;
+- Registro de exames;
+- Registro de cirurgias;
+- Registro de medicamentos;
+- Consulta ao histórico de saúde dos pets.
 
 ## Autoras
 
