@@ -1,23 +1,87 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Medicamentos</h1>
+<div class="container-fluid">
 
-{% if medicamento_list %}
-    <ul>
-    {% for medicamento in medicamento_list %}
-        <li>
-            <a href="{% url 'medicamento:detalhar' medicamento.id %}">
-                {{ medicamento.pet.nome }} - {{ medicamento.nome }}
-            </a>
-            ({{ medicamento.dosagem }}, {{ medicamento.frequencia }}) - status: {{ medicamento.status_tratamento }}
-        </li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>Nenhum medicamento registrado.</p>
-{% endif %}
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Tratamentos e Medicamentos</h1>
+        <a href="{% url 'medicamento:criar' %}" class="btn btn-primary shadow-sm">
+            <i class="fas fa-plus fa-sm text-white-50 mr-1"></i> Registrar Novo Medicamento
+        </a>
+    </div>
 
-<a href="{% url 'medicamento:criar' %}">Registrar novo medicamento</a>
+    <!-- DataTales Table -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 bg-primary">
+            <h6 class="m-0 font-weight-bold text-white">Lista de Medicamentos Registrados</h6>
+        </div>
+        <div class="card-body">
+            {% if medicamento_list %}
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Pet</th>
+                                <th>Medicamento</th>
+                                <th>Dosagem</th>
+                                <th>Frequência</th>
+                                <th class="text-center">Status</th>
+                                <th class="text-center" style="width: 150px;">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for medicamento in medicamento_list %}
+                                <tr>
+                                    <td class="align-middle font-weight-bold text-gray-800">
+                                        <i class="fas fa-paw text-secondary mr-1"></i> {{ medicamento.pet.nome }}
+                                    </td>
+                                    <td class="align-middle font-weight-bold text-primary">
+                                        <a href="{% url 'medicamento:detalhar' medicamento.id %}">
+                                            {{ medicamento.nome }}
+                                        </a>
+                                    </td>
+                                    <td class="align-middle">
+                                        {{ medicamento.dosagem }}
+                                    </td>
+                                    <td class="align-middle">
+                                        {{ medicamento.frequencia }}
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        {% if medicamento.status_tratamento == 'Concluído' or medicamento.status_tratamento == 'concluido' %}
+                                            <span class="badge badge-success p-2">Concluído</span>
+                                        {% elif medicamento.status_tratamento == 'Em andamento' or medicamento.status_tratamento == 'ativo' %}
+                                            <span class="badge badge-primary p-2">Em andamento</span>
+                                        {% else %}
+                                            <span class="badge badge-secondary p-2">{{ medicamento.status_tratamento }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        <a href="{% url 'medicamento:detalhar' medicamento.id %}" class="btn btn-info btn-sm" title="Ver Detalhes">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{% url 'medicamento:editar' medicamento.id %}" class="btn btn-warning btn-sm" title="Editar">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="{% url 'medicamento:excluir' medicamento.id %}" class="btn btn-danger btn-sm" title="Excluir">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="text-center py-4">
+                    <p class="text-muted mb-3">Nenhum medicamento registrado até o momento.</p>
+                    <a href="{% url 'medicamento:criar' %}" class="btn btn-success btn-sm">
+                        Registrar o primeiro medicamento
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
 
+</div>
 {% endblock %}

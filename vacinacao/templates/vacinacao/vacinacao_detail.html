@@ -1,16 +1,116 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Vacinação: {{ vacinacao.vacina.nome }}</h1>
+<div class="container-fluid">
 
-    <p>Pet: {{ vacinacao.pet.nome }}</p>
-    <p>Dose atual: {{ vacinacao.dose_atual }}</p>
-    <p>Data de aplicação: {{ vacinacao.data_aplicacao }}</p>
-    <p>Próxima dose: {{ vacinacao.proxima_dose|default:"-" }}</p>
-    <p>Status: {{ vacinacao.status_alerta }}</p>
-    <p>Observações: {{ vacinacao.observacoes|default:"-" }}</p>
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Prontuário de Vacinação</h1>
+        <a href="{% url 'vacinacao:listar' %}" class="btn btn-secondary shadow-sm">
+            <i class="fas fa-arrow-left fa-sm text-white-50 mr-1"></i> Voltar para o Histórico
+        </a>
+    </div>
 
-    <a href="{% url 'vacinacao:editar' vacinacao.id %}">Editar</a>
-    <a href="{% url 'vacinacao:excluir' vacinacao.id %}">Excluir</a>
-    <a href="{% url 'vacinacao:listar' %}">Voltar</a>
+    <div class="row justify-content-center">
+        <div class="col-xl-9 col-lg-10">
+            <!-- Card Principal -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 bg-primary d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-white">
+                        <i class="fas fa-syringe mr-2"></i> {{ vacinacao.vacina.nome }}
+                    </h6>
+                    <span class="badge badge-light text-primary font-weight-bold">
+                        <i class="fas fa-paw mr-1"></i> {{ vacinacao.pet.nome }}
+                    </span>
+                </div>
+                
+                <div class="card-body">
+
+                    <!-- Cards Informativos em Grid -->
+                    <div class="row mb-4">
+                        <!-- Dose Atual -->
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <div class="card border-left-info shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Dose Aplicada</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ vacinacao.dose_atual }}ª Dose</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Data de Aplicação -->
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Data de Aplicação</div>
+                                    <div class="h6 mb-0 font-weight-bold text-gray-800">
+                                        <i class="far fa-calendar-check text-primary mr-1"></i>{{ vacinacao.data_aplicacao }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Próxima Dose -->
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <div class="card border-left-warning shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Próxima Dose</div>
+                                    <div class="h6 mb-0 font-weight-bold text-gray-800">
+                                        <i class="far fa-calendar-alt text-warning mr-1"></i>{{ vacinacao.proxima_dose|default:"-" }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Status / Alerta -->
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <div class="card border-left-success shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Status</div>
+                                    <div class="h6 mb-0 font-weight-bold">
+                                        {% if vacinacao.status_alerta == 'Em dia' or vacinacao.status_alerta == 'Concluído' %}
+                                            <span class="badge badge-success p-2">Em dia</span>
+                                        {% elif vacinacao.status_alerta == 'Pendente' or vacinacao.status_alerta == 'Atrasado' %}
+                                            <span class="badge badge-warning p-2">{{ vacinacao.status_alerta }}</span>
+                                        {% else %}
+                                            <span class="badge badge-secondary p-2">{{ vacinacao.status_alerta }}</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Observações -->
+                    <div class="form-group mb-4">
+                        <label class="font-weight-bold text-gray-700">Observações / Notas Médicas:</label>
+                        <div class="p-3 bg-light rounded text-gray-800 border">
+                            {% if vacinacao.observacoes %}
+                                {{ vacinacao.observacoes }}
+                            {% else %}
+                                <em class="text-muted">Nenhuma observação registrada para esta aplicação.</em>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- Ações de Navegação -->
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a href="{% url 'vacinacao:listar' %}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left mr-1"></i> Voltar à Lista
+                        </a>
+                        {% if vacinacao.editar_url %}
+                            <a href="{% url 'vacinacao:editar' vacinacao.id %}" class="btn btn-warning">
+                                <i class="fas fa-edit mr-1"></i> Editar Registro
+                            </a>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
 {% endblock %}

@@ -1,14 +1,37 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Excluir Vacina</h1>
+<div class="container-fluid">
 
-    <p>Tem certeza que deseja excluir "{{ vacina.nome }}"?</p>
+    <div class="row justify-content-center mt-4">
+        <div class="col-xl-6 col-lg-8 col-md-10">
+            <div class="card border-left-danger shadow mb-4">
+                <div class="card-header py-3 bg-danger text-white">
+                    <h6 class="m-0 font-weight-bold">
+                        <i class="fas fa-exclamation-triangle mr-2"></i> Confirmar Exclusão
+                    </h6>
+                </div>
+                <div class="card-body text-center py-4">
+                    <h5 class="card-title text-gray-900 mb-3">
+                        Tem certeza que deseja excluir a vacina <strong class="text-danger">"{{ vacina.nome }}"</strong>?
+                    </h5>
+                    <p class="text-muted small mb-4">
+                        Esta ação não poderá ser desfeita.
+                    </p>
 
-    <form action="{% url 'vacina:excluir' vacina.id %}" method="post">
-    {% csrf_token %}
-    <input type="submit" value="Confirmar exclusão">
-    </form>
+                    <form action="{% url 'vacina:excluir' vacina.id %}" method="post" class="d-inline">
+                        {% csrf_token %}
+                        <a href="{% url 'vacina:detalhar' vacina.id %}" class="btn btn-secondary mr-2">
+                            <i class="fas fa-times mr-1"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash mr-1"></i> Sim, confirmar exclusão
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <a href="{% url 'vacina:detalhar' vacina.id %}">Cancelar</a>
+</div>
 {% endblock %}

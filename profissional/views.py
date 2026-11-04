@@ -80,11 +80,8 @@ def editar_profissional(request, pk):
 
 # DELETE
 @login_required
-def excluir_profissional(request, id):
-    profissional = get_object_or_404(
-        Profissional,
-        id=id
-    )
+def excluir_profissional(request, pk):
+    profissional = get_object_or_404(Profissional, id=pk)
 
     if request.method == 'POST':
         profissional.delete()

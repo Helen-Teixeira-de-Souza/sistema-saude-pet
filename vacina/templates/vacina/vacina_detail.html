@@ -1,13 +1,69 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>{{ vacina.nome }}</h1>
+<div class="container-fluid">
 
-    <p>Quantidade de doses: {{ vacina.quantidade_dose }}</p>
-    <p>Intervalo entre doses: {{ vacina.intervalo_doses_dias }} dia(s)</p>
-    <p>Descrição: {{ vacina.descricao }}</p>
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Detalhes da Vacina</h1>
+        <a href="{% url 'vacina:listar' %}" class="btn btn-secondary shadow-sm">
+            <i class="fas fa-arrow-left fa-sm text-white-50 mr-1"></i> Voltar para a lista
+        </a>
+    </div>
 
-    <a href="{% url 'vacina:editar' vacina.id %}">Editar</a>
-    <a href="{% url 'vacina:excluir' vacina.id %}">Excluir</a>
-    <a href="{% url 'vacina:listar' %}">Voltar</a>
+    <!-- Details Card -->
+    <div class="row justify-content-center">
+        <div class="col-xl-8 col-lg-10">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 bg-primary d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-white">{{ vacina.nome }}</h6>
+                    <span class="badge badge-light text-primary font-weight-bold">ID #{{ vacina.id }}</span>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6 mb-3">
+                            <div class="card border-left-info shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Doses Necessárias</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ vacina.quantidade_dose }} dose(s)</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card border-left-warning shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Intervalo Entre Doses</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ vacina.intervalo_doses_dias }} dia(s)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label class="font-weight-bold text-gray-700">Descrição / Observações:</label>
+                        <p class="p-3 bg-light rounded text-gray-800 border">
+                            {% if vacina.descricao %}
+                                {{ vacina.descricao }}
+                            {% else %}
+                                <em class="text-muted">Nenhuma descrição cadastrada para esta vacina.</em>
+                            {% endif %}
+                        </p>
+                    </div>
+
+                    <hr>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="{% url 'vacina:editar' vacina.id %}" class="btn btn-warning mr-2">
+                            <i class="fas fa-edit mr-1"></i> Editar
+                        </a>
+                        <a href="{% url 'vacina:excluir' vacina.id %}" class="btn btn-danger">
+                            <i class="fas fa-trash mr-1"></i> Excluir
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
 {% endblock %}

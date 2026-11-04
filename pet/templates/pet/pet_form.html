@@ -1,14 +1,62 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h2>Cadastrar / Editar Pet</h2>
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-sm-align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Gerenciar Pet</h1>
+    </div>
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Salvar</button>
-    </form>
+    <div class="row justify-content-center">
+        <div class="col-xl-8 col-lg-10 col-md-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 bg-primary">
+                    <h6 class="m-0 font-weight-bold text-white">Cadastrar / Editar Pet</h6>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
 
-    <br>
-    <a href="{% url 'pet:listar' %}">Voltar para a lista</a>
+                        {% for field in form %}
+                            <div class="form-group mb-3">
+                                <label for="{{ field.id_for_label }}" class="font-weight-bold text-gray-700">
+                                    {{ field.label }}
+                                </label>
+                                
+                                {{ field }}
+                                
+                                {% if field.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ field.errors.0 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+
+                        <div class="form-group mt-4 d-flex justify-content-between align-items-center">
+                            <a href="{% url 'pet:listar' %}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Voltar para a lista
+                            </a>
+                            <button type="submit" class="btn btn-success px-4">
+                                <i class="fas fa-save"></i> Salvar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- forçar a classe form-control do Bootstrap nos inputs gerados pelo Django -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var inputs = document.querySelectorAll('input, select, textarea');
+        inputs.forEach(function(element) {
+            if (!element.classList.contains('form-control') && !element.classList.contains('form-check-input')) {
+                element.classList.add('form-control');
+            }
+        });
+    });
+</script>
 {% endblock %}

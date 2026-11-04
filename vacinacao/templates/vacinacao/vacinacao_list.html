@@ -1,22 +1,81 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Vacinações</h1>
+<div class="container-fluid">
 
-    {% if vacinacao_list %}
-        <ul>
-        {% for vacinacao in vacinacao_list %}
-            <li>
-                <a href="{% url 'vacinacao:detalhar' vacinacao.id %}">
-                    {{ vacinacao.pet.nome }} - {{ vacinacao.vacina.nome }} (dose {{ vacinacao.dose_atual }})
-                </a>
-                - aplicada em {{ vacinacao.data_aplicacao }} - status: {{ vacinacao.status_alerta }}
-            </li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>Nenhuma vacinação registrada.</p>
-    {% endif %}
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Controle de Vacinações</h1>
+        <a href="{% url 'vacinacao:criar' %}" class="btn btn-primary shadow-sm">
+            <i class="fas fa-plus fa-sm text-white-50 mr-1"></i> Registrar Nova Vacinação
+        </a>
+    </div>
 
-    <a href="{% url 'vacinacao:criar' %}">Registrar nova vacinação</a>
+    <!-- DataTales Table -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 bg-primary">
+            <h6 class="m-0 font-weight-bold text-white">Histórico de Aplicações</h6>
+        </div>
+        <div class="card-body">
+            {% if vacinacao_list %}
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Pet</th>
+                                <th>Vacina</th>
+                                <th class="text-center">Dose</th>
+                                <th class="text-center">Data de Aplicação</th>
+                                <th class="text-center">Status / Alerta</th>
+                                <th class="text-center" style="width: 120px;">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for vacinacao in vacinacao_list %}
+                                <tr>
+                                    <td class="align-middle font-weight-bold text-gray-800">
+                                        <i class="fas fa-paw text-secondary mr-1"></i> {{ vacinacao.pet.nome }}
+                                    </td>
+                                    <td class="align-middle font-weight-bold text-primary">
+                                        <a href="{% url 'vacinacao:detalhar' vacinacao.id %}">
+                                            {{ vacinacao.vacina.nome }}
+                                        </a>
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        <span class="badge badge-info p-2">{{ vacinacao.dose_atual }}ª Dose</span>
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        <i class="far fa-calendar-alt text-primary mr-1"></i> {{ vacinacao.data_aplicacao }}
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        {% if vacinacao.status_alerta == 'Em dia' or vacinacao.status_alerta == 'Concluído' %}
+                                            <span class="badge badge-success p-2">Em dia</span>
+                                        {% elif vacinacao.status_alerta == 'Pendente' or vacinacao.status_alerta == 'Atrasado' %}
+                                            <span class="badge badge-warning p-2">{{ vacinacao.status_alerta }}</span>
+                                        {% else %}
+                                            <span class="badge badge-secondary p-2">{{ vacinacao.status_alerta }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        <a href="{% url 'vacinacao:detalhar' vacinacao.id %}" class="btn btn-info btn-sm" title="Ver Detalhes">
+                                            <i class="fas fa-eye"></i> Detalhes
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="text-center py-4">
+                    <p class="text-muted mb-3">Nenhuma vacinação registrada no sistema até o momento.</p>
+                    <a href="{% url 'vacinacao:criar' %}" class="btn btn-success btn-sm">
+                        Registrar a primeira vacinação
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
 {% endblock %}

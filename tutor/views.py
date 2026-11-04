@@ -1,7 +1,8 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.admin.views.decorators import staff_member_required
-from .forms import TutorForm
+from django.shortcuts import get_object_or_404, redirect, render
+from .forms import TutorCreationForm, TutorForm
 from .models import Tutor
 from pet.models import Pet
 from consulta.models import Consulta
@@ -26,17 +27,23 @@ def detalhar_tutor(request, pk):
 
 
 # CADASTRAR (Criar)
-@staff_member_required(login_url='/login/')
-def criar_tutor(request):
+def registrar_tutor(request):
   if request.method == 'POST':
-    form = TutorForm(request.POST)
+    form = TutorCreationForm(request.POST)
     if form.is_valid():
       tutor = form.save()
-      return redirect('tutor:detalhar', pk=tutor.pk)
+      if request.user.is_authenticated and request.user.is_staff:
+        return redirect('tutor:detalhar', pk=tutor.pk)
+      messages.success(request, 'Cadastro realizado. Entre com seu usuário e senha.')
+      return redirect('login')
   else:
-    form = TutorForm()
+    form = TutorCreationForm()
 
-  return render(request, 'tutor/tutor_form.html', {'form': form})
+  return render(request, 'tutor/tutor_form.html', {
+    'form': form,
+    'titulo': 'Criar conta de tutor',
+    'cadastro_publico': True,
+  })
 
 
 # EDITAR (Atualizar)
@@ -52,7 +59,11 @@ def editar_tutor(request, pk):
   else:
     form = TutorForm(instance=tutor)
 
-  return render(request, 'tutor/tutor_form.html', {'form': form, 'tutor': tutor})
+  return render(request, 'tutor/tutor_form.html', {
+    'form': form,
+    'tutor': tutor,
+    'titulo': 'Editar tutor',
+  })
 
 
 # EXCLUIR (Deletar)
