@@ -93,4 +93,3 @@ def dashboard_tutor(request):
         'cirurgias': minhas_cirurgias,
     }
     return render(request, 'tutor/dashboard.html', context)
-# essa pagina dashboard.html nao existe ainda

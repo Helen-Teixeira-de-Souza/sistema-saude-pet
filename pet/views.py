@@ -90,7 +90,7 @@ def excluir_pet(request, pk):
 
   if request.method == 'POST':
     pet.delete()
-    messages.warning(request, f'O pet "{pet.nome}" foi removido do sistema.')
+    messages.warning(request, f'O pet {pet.nome} foi removido do sistema.')
     return redirect('pet:listar')
 
   return render(request, 'pet/pet_confirm_delete.html', {'pet': pet})
