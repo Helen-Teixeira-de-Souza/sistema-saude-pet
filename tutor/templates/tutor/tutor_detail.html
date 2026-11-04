@@ -11,7 +11,7 @@
         <li class="list-group-item">
             <strong>Pets:</strong>
             {% for pet in pets %}
-                <a href="{% url 'tutor:detalhar_pet' pet.pk %}">{{ pet.nome }}</a> ({{ pet.especie }}){% if not forloop.last %}, {% endif %}
+              <a href="{% url 'pet:detalhar' pet.pk %}">{{ pet.nome }}</a>
             {% empty %}
                 Nenhum pet cadastrado
             {% endfor %}
