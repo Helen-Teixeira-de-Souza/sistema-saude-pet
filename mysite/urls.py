@@ -3,19 +3,36 @@ from django.http import HttpResponse
 from django.urls import include, path
 from django.contrib.auth import views as auth_views
 
-# View temporária para a home
-def home_temporaria(request):
-    return HttpResponse("<h1>Sistema Saúde Pet</h1><p>Em desenvolvimento. Acesse os módulos diretamente pelas URLs (ex: /consultas/, /vacinas/).</p>")
-
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home_temporaria, name='home'),
+    path('', include('tutor.urls')),
     path('pet/', include('pet.urls')),
+    path('tutor/', include('tutor.urls')),
     path('vacinacao/', include('vacinacao.urls')),
     path('vacina/', include('vacina.urls')),
     path('cirurgia/', include('cirurgia.urls')),
     path('medicamento/', include('medicamento.urls')),
-    path('consultas/', include('consulta.urls')),
+    path('consulta/', include('consulta.urls')),
+    path('exame/', include('exame.urls')),
+    path('profissional/', include('profissional.urls')),
     path('login/', auth_views.LoginView.as_view(template_name='usuarios/login.html'), name='login'),
+    path('accounts/login/', auth_views.LoginView.as_view(template_name='usuarios/login.html'), name='accounts_login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+
+    # Rotas para redefinição de senha
+    path('reset_password/', 
+         auth_views.PasswordResetView.as_view(template_name="registration/password_reset.html"), 
+         name="reset_password"),
+         
+    path('reset_password_sent/', 
+         auth_views.PasswordResetDoneView.as_view(template_name="registration/password_reset_sent.html"), 
+         name="password_reset_done"),
+         
+    path('reset/<uidb64>/<token>/', 
+         auth_views.PasswordResetConfirmView.as_view(template_name="registration/password_reset_confirm.html"), 
+         name="password_reset_confirm"),
+         
+    path('reset_password_complete/', 
+         auth_views.PasswordResetCompleteView.as_view(template_name="registration/password_reset_complete.html"), 
+         name="password_reset_complete"),
 ]

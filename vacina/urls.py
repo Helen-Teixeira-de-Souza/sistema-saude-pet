@@ -6,7 +6,7 @@ app_name = 'vacina'
 urlpatterns = [
     path("", views.listar_vacinas, name="listar"),
     path("novo/", views.criar_vacina, name="criar"),
-    path("<int:vacina_id>/", views.detalhar_vacina, name="detalhar"),
-    path("<int:vacina_id>/editar/", views.editar_vacina, name="editar"),
-    path("<int:vacina_id>/excluir/", views.excluir_vacina, name="excluir"),
+    path("<int:pk>/", views.detalhar_vacina, name="detalhar"),
+    path("<int:pk>/editar/", views.editar_vacina, name="editar"),
+    path("<int:pk>/excluir/", views.excluir_vacina, name="excluir"),
 ]

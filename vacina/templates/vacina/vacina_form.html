@@ -1,26 +1,32 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>{% if vacina %}Editar{% else %}Cadastrar{% endif %} Vacina</h1>
+<div class="container mt-4">
+    <h1 class="h3 mb-4 text-gray-800">{% if vacina %}Editar Vacina{% else %}Cadastrar Vacina{% endif %}</h1>
 
-    <form action="{% if vacina %}{% url 'vacina_update' vacina.id %}{% else %}{% url 'vacina_create' %}{% endif %}" method="post">
-    {% csrf_token %}
-    <p>
-        <label for="nome">Nome:</label>
-        <input type="text" name="nome" id="nome" value="{{ vacina.nome|default:'' }}">
-    </p>
-    <p>
-        <label for="quantidade_dose">Quantidade de doses:</label>
-        <input type="number" name="quantidade_dose" id="quantidade_dose" value="{{ vacina.quantidade_dose|default:1 }}">
-    </p>
-    <p>
-        <label for="intervalo_doses_dias">Intervalo entre doses (dias):</label>
-        <input type="number" name="intervalo_doses_dias" id="intervalo_doses_dias" value="{{ vacina.intervalo_doses_dias|default:0 }}">
-    </p>
-    <p>
-        <label for="descricao">Descrição:</label><br>
-        <textarea name="descricao" id="descricao">{{ vacina.descricao|default:'' }}</textarea>
-    </p>
-    <input type="submit" value="Salvar">
-    </form>
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <form method="post" novalidate>
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+                {% endif %}
+
+                {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% for erro in field.errors %}
+                    <div class="text-danger small">{{ erro }}</div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+
+                <button type="submit" class="btn btn-primary">Salvar</button>
+            <a href="{% url 'vacina:listar' %}" class="btn btn-secondary">Cancelar</a>
+        </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

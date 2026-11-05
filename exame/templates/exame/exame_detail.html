@@ -11,6 +11,6 @@
         <li class="list-group-item"><strong>Resultado:</strong> {% if exame.resultado %}{{ exame.resultado }}{% else %}Sem resultado informado{% endif %}</li>
         <li class="list-group-item"><strong>Observações:</strong> {% if exame.observacoes %}{{ exame.observacoes }}{% else %}Nenhuma observação{% endif %}</li>
     </ul>
-    <a href="{% url 'exame_list' %}" class="btn btn-secondary">Voltar</a>
+    <a href="{% url 'exame:listar' %}" class="btn btn-secondary">Voltar</a>
 </div>
 {% endblock %}

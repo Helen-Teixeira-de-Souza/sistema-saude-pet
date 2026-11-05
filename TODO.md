@@ -1,7 +1,4 @@
-- [ ] Configurar o driver MySQL
-- [ ] Templates base para os CRUDs
-- [ ] Verificar consistencia entre os templates
-
-obs:
+ [] Correct critical bugs
+ 
  Ctrl + K, Ctrl + C comentar
  Ctrl + K, Ctrl + U descomentar

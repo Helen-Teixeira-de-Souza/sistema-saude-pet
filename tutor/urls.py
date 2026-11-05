@@ -1,9 +1,13 @@
 from django.urls import path
 from . import views
 
+app_name = 'tutor'
+
 urlpatterns = [
-    path('<int:pk>/', views.tutor_detail, name='tutor_detail'),
-    path('novo/', views.tutor_create, name='tutor_create'),
-    path('<int:pk>/editar/', views.tutor_update, name='tutor_update'),
-    path('<int:pk>/deletar/', views.tutor_delete, name='tutor_delete'),
+    path('', views.listar_tutores, name='listar'),
+    path('<int:pk>/', views.detalhar_tutor, name='detalhar'),
+    path('novo/', views.registrar_tutor, name='criar'),
+    path('<int:pk>/editar/', views.editar_tutor, name='editar'),
+    path('<int:pk>/deletar/', views.excluir_tutor, name='excluir'),
+    path('dashboard/', views.dashboard_tutor, name='dashboard'),
 ]

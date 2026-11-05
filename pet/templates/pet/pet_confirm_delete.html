@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow border-danger">
+        <div class="card-header bg-danger text-white">
+            <h2>Confirmar Exclusão</h2>
+        </div>
+        <div class="card-body">
+            <p class="fs-5">Tem certeza de que deseja excluir o pet <strong>{{ pet.nome }}</strong>?</p>
+            <p class="text-muted">Esta ação não poderá ser desfeita.</p>
+
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Sim, tenho certeza</button>
+                <a href="{% url 'pet:listar' %}" class="btn btn-secondary">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

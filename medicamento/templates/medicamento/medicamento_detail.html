@@ -1,3 +1,7 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
 <h1>Medicamento: {{ medicamento.nome }}</h1>
 
 <p>Pet: {{ medicamento.pet.nome }}</p>
@@ -9,6 +13,8 @@
 <p>Fim previsto: {{ medicamento.data_fim }}</p>
 <p>Status do tratamento: {{ medicamento.status_tratamento }}</p>
 
-<a href="{% url 'medicamento_update' medicamento.id %}">Editar</a>
-<a href="{% url 'medicamento_delete' medicamento.id %}">Excluir</a>
-<a href="{% url 'medicamento_list' %}">Voltar</a>
+<a href="{% url 'medicamento:editar' medicamento.id %}">Editar</a>
+<a href="{% url 'medicamento:excluir' medicamento.id %}">Excluir</a>
+<a href="{% url 'medicamento:listar' %}">Voltar</a>
+
+{% endblock %}

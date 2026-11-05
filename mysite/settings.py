@@ -83,11 +83,17 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'pcc_saude_pet',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        },
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -128,5 +134,8 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 
 # Autenticação
 LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/login/'
+LOGIN_REDIRECT_URL = 'pet:listar'
+LOGOUT_REDIRECT_URL = 'login'
+
+# Imprime os e-mails de redefinição de senha diretamente no terminal (para testar)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

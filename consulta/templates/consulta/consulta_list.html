@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container mt-4">
     <h2>Lista de Consultas</h2>
-    <a href="{% url 'consulta_create' %}" class="btn btn-primary mb-3">Nova Consulta</a>
+    <a href="{% url 'consulta:criar' %}" class="btn btn-primary mb-3">Nova Consulta</a>
     
     <table class="table table-striped">
         <thead>
@@ -23,9 +23,9 @@
                 <td>{{ consulta.data }}</td>
                 <td>{{ consulta.diagnostico|truncatechars:30 }}</td>
                 <td>
-                    <a href="{% url 'consulta_detail' consulta.pk %}" class="btn btn-info btn-sm">Ver</a>
-                    <a href="{% url 'consulta_update' consulta.pk %}" class="btn btn-warning btn-sm">Editar</a>
-                    <a href="{% url 'consulta_delete' consulta.pk %}" class="btn btn-danger btn-sm">Excluir</a>
+                    <a href="{% url 'consulta:detalhar' consulta.pk %}" class="btn btn-info btn-sm">Ver</a>
+                    <a href="{% url 'consulta:editar' consulta.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                    <a href="{% url 'consulta:excluir' consulta.pk %}" class="btn btn-danger btn-sm">Excluir</a>
                 </td>
             </tr>
             {% empty %}

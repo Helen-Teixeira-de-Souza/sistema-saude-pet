@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="h3 mb-4 text-gray-800">Avisos de Vacinação</h1>
+
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            {% if avisos %}
+            <div class="table-responsive">
+                <table class="table table-bordered" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Pet</th>
+                            <th>Vacina</th>
+                            <th>Data do aviso</th>
+                            <th>Mensagem</th>
+                            <th>Situação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for aviso in avisos %}
+                        <tr>
+                            <td>{{ aviso.vacinacao.pet.nome }}</td>
+                            <td>
+                                <a href="{% url 'vacinacao:detalhar' aviso.vacinacao.id %}">
+                                    {{ aviso.vacinacao.vacina.nome }}
+                                </a>
+                            </td>
+                            <td>{{ aviso.data_aviso|date:"d/m/Y" }}</td>
+                            <td>{{ aviso.mensagem }}</td>
+                            <td>
+                                {% if aviso.data_aviso <= hoje %}
+                                    <span class="badge badge-danger">Ativo</span>
+                                {% else %}
+                                    <span class="badge badge-info">Agendado</span>
+                                {% endif %}
+                                <span class="badge badge-secondary">{{ aviso.status }}</span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="text-muted mb-0">Nenhum aviso de vacinação no momento.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
