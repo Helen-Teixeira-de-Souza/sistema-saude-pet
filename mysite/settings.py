@@ -134,7 +134,7 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 
 # Autenticação
 LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = 'pet:listar'
+LOGIN_REDIRECT_URL = 'pet:pet_list'
 LOGOUT_REDIRECT_URL = 'login'
 
 # Imprime os e-mails de redefinição de senha diretamente no terminal (para testar)
