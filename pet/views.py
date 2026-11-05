@@ -1,25 +1,37 @@
 from django.contrib.auth.decorators import login_required
 from datetime import date
-from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.contrib import messages
+
+from tutor.models import Tutor
 from .forms import PetForm
 from .models import Pet
+
+# Restringe o campo de tutor no formulário para que o usuário comum só possa selecionar a si mesmo
+def _form_pet(request, *args, **kwargs):
+  form = PetForm(*args, **kwargs)
+  if not request.user.is_staff:
+    form.fields['tutor'].queryset = form.fields['tutor'].queryset.filter(pk=request.user.pk)
+  return form 
 
 # --- GESTÃO DO PET ---
 
 # LISTAR
 @login_required(login_url='/login/')
-def listar_pets(request):
-  pets = Pet.objects.all()
-  return render(request, 'pet/pet_list.html', {'pets': pets})
 
+def listar_pets(request):
+    if request.user.is_staff or request.user.is_superuser:
+        pets = Pet.objects.all()
+    else:
+        pets = Pet.objects.filter(tutor_id=request.user.pk)
+
+    return render(request, 'pet/pet_list.html', {'pet_list': pets})
 
 # DETALHAR
 @login_required(login_url='/login/')
 def detalhar_pet(request, pk):
-  pet = get_object_or_404(Pet, pk=pk)
+  pet = get_object_or_404(_pets_visiveis(request), pk=pk)
 
   # Cálculo da idade
   hoje = date.today()
@@ -49,7 +61,7 @@ def detalhar_pet(request, pk):
 @login_required(login_url='/login/')
 def criar_pet(request):
   if request.method == 'POST':
-    form = PetForm(request.POST)
+    form = _form_pet(request, request.POST)
 
     if form.is_valid():
       pet = form.save()
@@ -58,7 +70,7 @@ def criar_pet(request):
     else:
       messages.error(request, 'Erro ao cadastrar o pet. Verifique os dados informados.')
   else:
-    form = PetForm()
+    form = _form_pet(request)
 
   return render(request, 'pet/pet_form.html', {'form': form})
 
@@ -66,10 +78,10 @@ def criar_pet(request):
 # ATUALIZAR / EDITAR
 @login_required(login_url='/login/')
 def editar_pet(request, pk):
-  pet = get_object_or_404(Pet, pk=pk)
+  pet = get_object_or_404(_pets_visiveis(request), pk=pk)
 
   if request.method == 'POST':
-    form = PetForm(request.POST, instance=pet)
+    form = _form_pet(request, request.POST, instance=pet)
 
     if form.is_valid():
       pet = form.save()
@@ -78,7 +90,7 @@ def editar_pet(request, pk):
     else:
       messages.error(request, 'Erro ao atualizar o pet. Verifique os dados informados.')
   else:
-    form = PetForm(instance=pet)
+    form = _form_pet(request, instance=pet)
 
   return render(request, 'pet/pet_form.html', {'form': form, 'pet': pet})
 
@@ -86,7 +98,7 @@ def editar_pet(request, pk):
 # DELETAR / EXCLUIR
 @login_required(login_url='/login/')
 def excluir_pet(request, pk):
-  pet = get_object_or_404(Pet, pk=pk)
+  pet = get_object_or_404(_pets_visiveis(request), pk=pk)
 
   if request.method == 'POST':
     pet.delete()
@@ -99,11 +111,7 @@ def excluir_pet(request, pk):
 # HISTÓRICO DE SAÚDE
 @login_required(login_url='/login/')
 def historico_pet(request, pk):
-  pet = get_object_or_404(Pet, pk=pk)
-
-  # Dados de saúde: o tutor só vê os próprios pets; a equipe (staff) vê todos
-  if not request.user.is_staff and pet.tutor_id != request.user.pk:
-    raise Http404
+  pet = get_object_or_404(_pets_visiveis(request), pk=pk)
 
   eventos = []
 
