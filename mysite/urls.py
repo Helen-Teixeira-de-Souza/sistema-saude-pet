@@ -1,11 +1,12 @@
 from django.contrib import admin
 from django.http import HttpResponse
 from django.urls import include, path
+from django.views.generic import RedirectView
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('tutor.urls')),
+    path('', RedirectView.as_view(pattern_name='tutor:dashboard', permanent=False)),
     path('pet/', include('pet.urls')),
     path('tutor/', include('tutor.urls')),
     path('vacinacao/', include('vacinacao.urls')),
