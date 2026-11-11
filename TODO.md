@@ -1,4 +1,2 @@
- [] Correct critical bugs
- 
  Ctrl + K, Ctrl + C comentar
  Ctrl + K, Ctrl + U descomentar
