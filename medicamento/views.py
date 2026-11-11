@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from pet.access import filtrar_por_tutor, permissao_ou_tutor, restringir_form
 from .models import Medicamento
 from .forms import MedicamentoForm
 from datetime import date, timedelta
@@ -8,12 +9,12 @@ from django.utils import timezone
 
 @login_required
 def listar_medicamentos(request):
-    medicamentos = Medicamento.objects.select_related('pet', 'consulta').all()
+    medicamentos = filtrar_por_tutor(Medicamento.objects.select_related('pet', 'consulta'), request.user)
     return render(request, 'medicamento/medicamento_list.html', {'medicamentos': medicamentos})
 
 @login_required
 def detalhar_medicamento(request, pk):
-    medicamento = get_object_or_404(Medicamento, pk=pk)
+    medicamento = get_object_or_404(filtrar_por_tutor(Medicamento.objects.all(), request.user), pk=pk)
     
     data_fim = medicamento.data_inicio + timedelta(days=medicamento.duracao_dias)
     hoje = date.today()
@@ -26,11 +27,11 @@ def detalhar_medicamento(request, pk):
     }
     return render(request, 'medicamento/medicamento_detail.html', context)
 
-@permission_required('medicamento.add_medicamento', login_url='/login/')
+@permissao_ou_tutor('medicamento.add_medicamento')
 @login_required
 def criar_medicamento(request):
     if request.method == 'POST':
-        form = MedicamentoForm(request.POST)
+        form = restringir_form(MedicamentoForm(request.POST), request.user)
         if form.is_valid():
             form.save()
             messages.success(request, 'Medicamento cadastrado com sucesso!')
@@ -38,23 +39,23 @@ def criar_medicamento(request):
         else:
             messages.error(request, 'Erro ao cadastrar o medicamento. Verifique os dados informados.')
     else:
-        form = MedicamentoForm()
+        form = restringir_form(MedicamentoForm(), request.user)
     return render(request, 'medicamento/medicamento_form.html', {'form': form, 'titulo': 'Cadastrar Medicamento'})
 
-@permission_required('medicamento.change_medicamento', login_url='/login/')
+@permissao_ou_tutor('medicamento.change_medicamento')
 @login_required
 def editar_medicamento(request, pk):
-    medicamento = get_object_or_404(Medicamento, pk=pk)
+    medicamento = get_object_or_404(filtrar_por_tutor(Medicamento.objects.all(), request.user), pk=pk)
 
     # Verifica se passou de 30 dias da data de cadastro (RN001)
-    dias_decorridos = (timezone.now().date() - medicamento.data).days
+    dias_decorridos = (timezone.now().date() - medicamento.data_inicio).days
             
     if dias_decorridos > 30:
         messages.error(request, 'Operação negada: registros com mais de 30 dias não podem ser alterados ou excluídos por razões de segurança.')
         return redirect('medicamento:listar')
 
     if request.method == 'POST':
-        form = MedicamentoForm(request.POST, instance=medicamento)
+        form = restringir_form(MedicamentoForm(request.POST, instance=medicamento), request.user)
         if form.is_valid():
             medicamento = form.save()
             messages.success(request, 'Medicamento atualizado com sucesso!')
@@ -62,17 +63,17 @@ def editar_medicamento(request, pk):
         else:
             messages.error(request, 'Erro ao atualizar o medicamento. Verifique os dados informados.')
     else:
-        form = MedicamentoForm(instance=medicamento)
+        form = restringir_form(MedicamentoForm(instance=medicamento), request.user)
 
     return render(request, 'medicamento/medicamento_form.html', {'form': form, 'medicamento': medicamento})
 
-@permission_required('medicamento.delete_medicamento', login_url='/login/')
+@permissao_ou_tutor('medicamento.delete_medicamento')
 @login_required
 def excluir_medicamento(request, pk):
-    medicamento = get_object_or_404(Medicamento, pk=pk)
+    medicamento = get_object_or_404(filtrar_por_tutor(Medicamento.objects.all(), request.user), pk=pk)
 
     # Verifica se passou de 30 dias da data de cadastro (RN001)
-    dias_decorridos = (timezone.now().date() - medicamento.data).days
+    dias_decorridos = (timezone.now().date() - medicamento.data_inicio).days
             
     if dias_decorridos > 30:
         messages.error(request, 'Operação negada: registros com mais de 30 dias não podem ser alterados ou excluídos por razões de segurança.')

@@ -13,21 +13,13 @@ Sistema de gerenciamento de saúde animal desenvolvido em Django, com o objetivo
 - JavaScript
 - MySQL
 - Bootstrap
-<<<<<<< HEAD
-
-=======
   
->>>>>>> d77a570bed45d970af075718cc7372142fcc631e
 ## Como executar o projeto
 
 ### Pré-requisitos
 
-<<<<<<< HEAD
-* Ter Python, Django e XAMPP instalados em sua máquina
-=======
 * Python (versão 3.10 ou superior) instalado
 * XAMPP instalado (com os serviços Apache e MySQL iniciados)
->>>>>>> d77a570bed45d970af075718cc7372142fcc631e
 
 ### 1. Clone o repositório:
 
@@ -60,8 +52,6 @@ python manage.py runserver
 
 http://127.0.0.1:8000/
 
-<<<<<<< HEAD
-=======
 ## Funcionalidades do sistema
 
 - Autenticação
@@ -76,7 +66,6 @@ http://127.0.0.1:8000/
   - Registro de medicamentos.
   - Registro de cirurgias.
 
->>>>>>> d77a570bed45d970af075718cc7372142fcc631e
 ## Autoras
 
 - Helen Souza

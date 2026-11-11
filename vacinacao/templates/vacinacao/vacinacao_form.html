@@ -9,6 +9,13 @@
             <form method="post" novalidate>
                 {% csrf_token %}
 
+                {% if sem_vacinas %}
+                <div class="alert alert-warning">
+                    Nenhuma vacina cadastrada no catálogo. Peça à equipe para cadastrar as vacinas
+                    {% if request.user.is_staff %}(<a href="{% url 'vacina:criar' %}">cadastrar vacina</a>){% endif %}.
+                </div>
+                {% endif %}
+
                 {% if form.non_field_errors %}
                 <div class="alert alert-danger">{{ form.non_field_errors }}</div>
                 {% endif %}

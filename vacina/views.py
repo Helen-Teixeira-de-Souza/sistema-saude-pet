@@ -7,20 +7,18 @@ from .models import Vacina
 from .forms import VacinaForm
 
 
-@staff_member_required(login_url='/login/')
+@login_required(login_url='/login/')
 def listar_vacinas(request):
     vacinas = Vacina.objects.all()
     return render(request, "vacina/vacina_list.html", {"vacina_list": vacinas})
 
-@staff_member_required(login_url='/login/')
-@login_required
+@login_required(login_url='/login/')
 def detalhar_vacina(request, pk):
     vacina = get_object_or_404(Vacina, pk=pk)
     return render(request, "vacina/vacina_detail.html", {"vacina": vacina})
 
 
-@staff_member_required(login_url='/login/')
-@permission_required('vacina.add_vacina', login_url='/login/')
+@login_required(login_url='/login/')
 def criar_vacina(request):
     if request.method == "POST":
         form = VacinaForm(request.POST)
@@ -36,7 +34,6 @@ def criar_vacina(request):
 
 
 @staff_member_required(login_url='/login/')
-@permission_required('vacina.change_vacina', login_url='/login/')
 def editar_vacina(request, pk):
     vacina = get_object_or_404(Vacina, pk=pk)
     if request.method == "POST":
@@ -53,7 +50,6 @@ def editar_vacina(request, pk):
 
 
 @staff_member_required(login_url='/login/')
-@permission_required('vacina.delete_vacina', login_url='/login/')
 def excluir_vacina(request, pk):
     vacina = get_object_or_404(Vacina, pk=pk)
     if request.method == "POST":

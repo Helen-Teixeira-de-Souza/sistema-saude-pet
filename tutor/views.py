@@ -6,7 +6,7 @@ from .forms import TutorCreationForm, TutorForm
 from .models import Tutor
 from pet.models import Pet
 from consulta.models import Consulta
-from vacinacao.models import Vacinacao
+from vacinacao.models import AvisoVacinacao, Vacinacao
 from cirurgia.models import Cirurgia
 from exame.models import Exame
 from medicamento.models import Medicamento
@@ -49,13 +49,17 @@ def registrar_tutor(request):
 # EDITAR (Atualizar)
 @login_required
 def editar_tutor(request, pk):
+  if not request.user.is_staff and request.user.pk != pk:
+    return redirect('tutor:dashboard')
   tutor = get_object_or_404(Tutor, pk=pk)
 
   if request.method == 'POST':
     form = TutorForm(request.POST, instance=tutor)
     if form.is_valid():
       tutor = form.save()
-      return redirect('tutor:detalhar', pk=tutor.pk)
+      if request.user.is_staff:
+        return redirect('tutor:detalhar', pk=tutor.pk)
+      return redirect('tutor:dashboard')
   else:
     form = TutorForm(instance=tutor)
 
@@ -82,8 +86,8 @@ def excluir_tutor(request, pk):
 def dashboard_tutor(request):
 
     if request.user.is_staff:
-        return render(request, 'tutor/admin_dashboard.html')
-        # essa pagina admin_dashboard.html nao existe ainda
+        # tutor/admin_dashboard.html não existe; a equipe vai direto para a lista de pets
+        return redirect('pet:listar')
 
     # Filtra os pets pertencentes ao usuário logado
     meus_pets = Pet.objects.filter(tutor=request.user)
@@ -95,7 +99,12 @@ def dashboard_tutor(request):
     minhas_vacinacoes = Vacinacao.objects.filter(pet__in=meus_pets)
     minhas_cirurgias = Cirurgia.objects.filter(pet__in=meus_pets)
     
+    avisos = AvisoVacinacao.objects.filter(
+        vacinacao__pet__in=meus_pets, vacinacao__isnull=False
+    ).select_related('vacinacao__pet', 'vacinacao__vacina').order_by('data_aviso')
+
     context = {
+        'avisos': avisos,
         'pets': meus_pets,
         'consultas': minhas_consultas,
         'exames': meus_exames,

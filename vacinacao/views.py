@@ -3,26 +3,28 @@ from datetime import date
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render, redirect, get_object_or_404
+from pet.access import filtrar_por_tutor, permissao_ou_tutor, restringir_form
+from vacina.models import Vacina
 from .models import AvisoVacinacao, Vacinacao
 from .forms import VacinacaoForm
 
 @login_required
 def listar_vacinacoes(request):
-    vacinacoes = Vacinacao.objects.select_related("pet", "vacina").all()
+    vacinacoes = filtrar_por_tutor(Vacinacao.objects.select_related("pet", "vacina"), request.user)
     return render(request, "vacinacao/vacinacao_list.html", {"vacinacao_list": vacinacoes})
 
 
 @login_required
 def detalhar_vacinacao(request, pk):
-    vacinacao = get_object_or_404(Vacinacao, pk=pk)
+    vacinacao = get_object_or_404(filtrar_por_tutor(Vacinacao.objects.all(), request.user), pk=pk)
     return render(request, "vacinacao/vacinacao_detail.html", {"vacinacao": vacinacao})
 
 
 @login_required
-@permission_required('vacinacao.add_vacinacao', login_url='/login/')
+@permissao_ou_tutor('vacinacao.add_vacinacao')
 def criar_vacinacao(request):
     if request.method == "POST":
-        form = VacinacaoForm(request.POST)
+        form = restringir_form(VacinacaoForm(request.POST), request.user)
         if form.is_valid():
             vacinacao = form.save()
             messages.success(request, f'Vacinação "{vacinacao.vacina.nome}" registrada para {vacinacao.pet.nome}!')
@@ -30,15 +32,15 @@ def criar_vacinacao(request):
         else:
             messages.error(request, 'Erro ao registrar a vacinação. Verifique os dados informados.')
     else:
-        form = VacinacaoForm()
-    return render(request, "vacinacao/vacinacao_form.html", {"form": form})
+        form = restringir_form(VacinacaoForm(), request.user)
+    return render(request, "vacinacao/vacinacao_form.html", {"form": form, "sem_vacinas": not Vacina.objects.exists()})
 
 @login_required
-@permission_required('vacinacao.change_vacinacao', login_url='/login/')
+@permissao_ou_tutor('vacinacao.change_vacinacao')
 def editar_vacinacao(request, pk):
-    vacinacao = get_object_or_404(Vacinacao, pk=pk)
+    vacinacao = get_object_or_404(filtrar_por_tutor(Vacinacao.objects.all(), request.user), pk=pk)
     if request.method == "POST":
-        form = VacinacaoForm(request.POST, instance=vacinacao)
+        form = restringir_form(VacinacaoForm(request.POST, instance=vacinacao), request.user)
         if form.is_valid():
             vacinacao = form.save()
             messages.success(request, f'Vacinação de {vacinacao.pet.nome} atualizada!')
@@ -46,13 +48,13 @@ def editar_vacinacao(request, pk):
         else:
             messages.error(request, 'Erro ao atualizar. Corrija os campos abaixo.')
     else:
-        form = VacinacaoForm(instance=vacinacao)
-    return render(request, "vacinacao/vacinacao_form.html", {"form": form, "vacinacao": vacinacao})
+        form = restringir_form(VacinacaoForm(instance=vacinacao), request.user)
+    return render(request, "vacinacao/vacinacao_form.html", {"form": form, "vacinacao": vacinacao, "sem_vacinas": not Vacina.objects.exists()})
 
 @login_required
-@permission_required('vacinacao.delete_vacinacao', login_url='/login/')
+@permissao_ou_tutor('vacinacao.delete_vacinacao')
 def excluir_vacinacao(request, pk):
-    vacinacao = get_object_or_404(Vacinacao, pk=pk)
+    vacinacao = get_object_or_404(filtrar_por_tutor(Vacinacao.objects.all(), request.user), pk=pk)
     if request.method == "POST":
         descricao = f'{vacinacao.vacina.nome} de {vacinacao.pet.nome}'
         vacinacao.delete()

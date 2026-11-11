@@ -23,62 +23,22 @@
                     </h6>
                 </div>
                 <div class="card-body">
-                    <form action="{% if medicamento %}{% url 'medicamento:editar' medicamento.id %}{% else %}{% url 'medicamento:criar' %}{% endif %}" method="post">
+                    <form method="post" novalidate>
                         {% csrf_token %}
 
-                        <!-- Pet -->
+                        {% if form.non_field_errors %}
+                        <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+                        {% endif %}
+
+                        {% for field in form %}
                         <div class="form-group mb-3">
-                            <label for="pet" class="font-weight-bold text-gray-700">Pet:</label>
-                            <select name="pet" id="pet" class="form-control" required>
-                                <option value="">-- Selecione o Pet --</option>
-                                {% for pet in pet_list %}
-                                    <option value="{{ pet.id }}" {% if medicamento.pet_id == pet.id %}selected{% endif %}>{{ pet.nome }}</option>
-                                {% endfor %}
-                            </select>
+                            <label for="{{ field.id_for_label }}" class="font-weight-bold text-gray-700">{{ field.label }}</label>
+                            {{ field }}
+                            {% for erro in field.errors %}
+                            <div class="text-danger small">{{ erro }}</div>
+                            {% endfor %}
                         </div>
-
-                        <!-- Consulta de Prescrição -->
-                        <div class="form-group mb-3">
-                            <label for="consulta" class="font-weight-bold text-gray-700">Consulta de prescrição:</label>
-                            <select name="consulta" id="consulta" class="form-control">
-                                <option value="">-- Nenhuma --</option>
-                                {% for consulta in consulta_list %}
-                                    <option value="{{ consulta.id }}" {% if medicamento.consulta_id == consulta.id %}selected{% endif %}>{{ consulta }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-
-                        <!-- Nome do Medicamento -->
-                        <div class="form-group mb-3">
-                            <label for="nome" class="font-weight-bold text-gray-700">Nome do medicamento:</label>
-                            <input type="text" name="nome" id="nome" class="form-control" value="{{ medicamento.nome|default:'' }}" placeholder="Ex: Omeprazol 20mg" required>
-                        </div>
-
-                        <!-- Dosagem -->
-                        <div class="form-group mb-3">
-                            <label for="dosagem" class="font-weight-bold text-gray-700">Dosagem:</label>
-                            <input type="text" name="dosagem" id="dosagem" class="form-control" value="{{ medicamento.dosagem|default:'' }}" placeholder="Ex: 1 comprimido a cada 12 horas" required>
-                        </div>
-
-                        <!-- Frequência -->
-                        <div class="form-group mb-3">
-                            <label for="frequencia" class="font-weight-bold text-gray-700">Frequência:</label>
-                            <input type="text" name="frequencia" id="frequencia" class="form-control" value="{{ medicamento.frequencia|default:'' }}" placeholder="Ex: 2 vezes ao dia" required>
-                        </div>
-
-                        <div class="row">
-                            <!-- Data de Início -->
-                            <div class="col-md-6 form-group mb-3">
-                                <label for="data_inicio" class="font-weight-bold text-gray-700">Data de início:</label>
-                                <input type="date" name="data_inicio" id="data_inicio" class="form-control" value="{{ medicamento.data_inicio|date:'Y-m-d'|default:'' }}" required>
-                            </div>
-
-                            <!-- Duração em Dias -->
-                            <div class="col-md-6 form-group mb-3">
-                                <label for="duracao_dias" class="font-weight-bold text-gray-700">Duração (dias):</label>
-                                <input type="number" name="duracao_dias" id="duracao_dias" class="form-control" value="{{ medicamento.duracao_dias|default:1 }}" min="1" required>
-                            </div>
-                        </div>
+                        {% endfor %}
 
                         <hr>
 
