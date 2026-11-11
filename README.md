@@ -30,25 +30,21 @@ git clone https://github.com/Helen-Teixeira-de-Souza/sistema-saude-pet.git
 python -m venv venv
 venv\Scripts\activate
 
-### 3. Instale as dependências:
-
-pip install -r requirements.txt
-
-### 4. Configure o banco de dados:
+### 3. Configure o banco de dados:
 
 Abra o painel de controle do XAMPP e clique em Start no MySQL.
 
 Acesse o phpMyAdmin (http://localhost/phpmyadmin/) e crie um banco de dados vazio com o nome: pcc_saude_pet.
 
-### 5. Execute as migrações do banco de dados:
+### 4. Execute as migrações do banco de dados:
 
 python manage.py migrate
 
-### 6. Inicie o servidor:
+### 5. Inicie o servidor:
 
 python manage.py runserver
 
-### 7. Acesse o sistema no navegador:
+### 6. Acesse o sistema no navegador:
 
 http://127.0.0.1:8000/
 
