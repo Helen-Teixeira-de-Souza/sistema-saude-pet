@@ -13,70 +13,29 @@ Sistema de gerenciamento de saúde animal desenvolvido em Django, com o objetivo
 - JavaScript
 - MySQL
 - Bootstrap
-<<<<<<< HEAD
 
-=======
-  
->>>>>>> d77a570bed45d970af075718cc7372142fcc631e
 ## Como executar o projeto
 
 ### Pré-requisitos
 
-<<<<<<< HEAD
 * Ter Python, Django e XAMPP instalados em sua máquina
-=======
-* Python (versão 3.10 ou superior) instalado
-* XAMPP instalado (com os serviços Apache e MySQL iniciados)
->>>>>>> d77a570bed45d970af075718cc7372142fcc631e
 
 ### 1. Clone o repositório:
 
 git clone https://github.com/Helen-Teixeira-de-Souza/sistema-saude-pet.git
 
-### 2. Crie e ative um ambiente virtual:
-
-python -m venv venv
-venv\Scripts\activate
-
-### 3. Instale as dependências:
-
-pip install -r requirements.txt
-
-### 4. Configure o banco de dados:
-
-Abra o painel de controle do XAMPP e clique em Start no MySQL.
-
-Acesse o phpMyAdmin (http://localhost/phpmyadmin/) e crie um banco de dados vazio com o nome: pcc_saude_pet.
-
-### 5. Execute as migrações do banco de dados:
+### 2. Execute as migrações do banco de dados:
 
 python manage.py migrate
 
-### 6. Inicie o servidor:
+### 3. Inicie o servidor:
 
 python manage.py runserver
 
-### 7. Acesse o sistema no navegador:
+### 4. Acesse o sistema no navegador:
 
 http://127.0.0.1:8000/
 
-<<<<<<< HEAD
-=======
-## Funcionalidades do sistema
-
-- Autenticação
-- Gestão de Tutores
-- Gestão de Profissionais
-- Gestão de Pets
-- Histórico de Saúde
-- Registros Médicos:
-  - Registro de consultas.
-  - Controle de vacinas e datas de aplicação.
-  - Registro de exames.
-  - Registro de medicamentos.
-  - Registro de cirurgias.
-
->>>>>>> d77a570bed45d970af075718cc7372142fcc631e
 ## Autoras
 
 - Helen Souza
