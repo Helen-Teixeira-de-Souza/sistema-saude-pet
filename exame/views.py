@@ -7,17 +7,19 @@ from .models import Exame
 from .forms import ExameForm
 
 @login_required
+@permission_required('exame.view_exame')
 def listar_exames(request):
     exames = filtrar_por_tutor(Exame.objects.select_related('pet', 'consulta'), request.user)
     return render(request, 'exame/exame_list.html', {'exames': exames})
 
 @login_required
+@permission_required('exame.view_exame')
 def detalhar_exame(request, pk):
     exame = get_object_or_404(filtrar_por_tutor(Exame.objects.all(), request.user), pk=pk)
     return render(request, 'exame/exame_detail.html', {'exame': exame})
 
-@permissao_ou_tutor('exame.add_exame')
 @login_required
+@permission_required('exame.add_exame')
 def criar_exame(request):
     if request.method == 'POST':
         form = restringir_form(ExameForm(request.POST), request.user)
@@ -31,8 +33,8 @@ def criar_exame(request):
         form = restringir_form(ExameForm(), request.user)
     return render(request, 'exame/exame_form.html', {'form': form, 'titulo': 'Cadastrar Exame'})
 
-@permissao_ou_tutor('exame.change_exame')
 @login_required
+@permission_required
 def editar_exame(request, pk):
     exame = get_object_or_404(filtrar_por_tutor(Exame.objects.all(), request.user), pk=pk)
 
@@ -55,8 +57,8 @@ def editar_exame(request, pk):
         form = restringir_form(ExameForm(instance=exame), request.user)
     return render(request, 'exame/exame_form.html', {'form': form, 'exame': exame})
 
-@permissao_ou_tutor('exame.delete_exame')
 @login_required
+@permission_required('exame.delete_exame')
 def excluir_exame(request, pk):
     exame = get_object_or_404(filtrar_por_tutor(Exame.objects.all(), request.user), pk=pk)
 

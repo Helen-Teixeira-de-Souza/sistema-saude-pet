@@ -9,19 +9,19 @@ from .models import AvisoVacinacao, Vacinacao
 from .forms import VacinacaoForm
 
 @login_required
+@permission_required('vacinacao.view_vacinacao')
 def listar_vacinacoes(request):
     vacinacoes = filtrar_por_tutor(Vacinacao.objects.select_related("pet", "vacina"), request.user)
     return render(request, "vacinacao/vacinacao_list.html", {"vacinacao_list": vacinacoes})
 
-
 @login_required
+@permission_required('vacinacao.view_vacinacao')
 def detalhar_vacinacao(request, pk):
     vacinacao = get_object_or_404(filtrar_por_tutor(Vacinacao.objects.all(), request.user), pk=pk)
     return render(request, "vacinacao/vacinacao_detail.html", {"vacinacao": vacinacao})
 
-
 @login_required
-@permissao_ou_tutor('vacinacao.add_vacinacao')
+@permission_required('vacinacao.add_vacinacao')
 def criar_vacinacao(request):
     if request.method == "POST":
         form = restringir_form(VacinacaoForm(request.POST), request.user)
@@ -36,7 +36,7 @@ def criar_vacinacao(request):
     return render(request, "vacinacao/vacinacao_form.html", {"form": form, "sem_vacinas": not Vacina.objects.exists()})
 
 @login_required
-@permissao_ou_tutor('vacinacao.change_vacinacao')
+@permission_required('vacinacao.change_vacinacao')
 def editar_vacinacao(request, pk):
     vacinacao = get_object_or_404(filtrar_por_tutor(Vacinacao.objects.all(), request.user), pk=pk)
     if request.method == "POST":
@@ -52,7 +52,7 @@ def editar_vacinacao(request, pk):
     return render(request, "vacinacao/vacinacao_form.html", {"form": form, "vacinacao": vacinacao, "sem_vacinas": not Vacina.objects.exists()})
 
 @login_required
-@permissao_ou_tutor('vacinacao.delete_vacinacao')
+@permission_required('vacinacao.delete_vacinacao')
 def excluir_vacinacao(request, pk):
     vacinacao = get_object_or_404(filtrar_por_tutor(Vacinacao.objects.all(), request.user), pk=pk)
     if request.method == "POST":
@@ -62,8 +62,8 @@ def excluir_vacinacao(request, pk):
         return redirect("vacinacao:listar")
     return render(request, "vacinacao/vacinacao_confirm_delete.html", {"vacinacao": vacinacao})
 
-
 @login_required
+@permission_required('vacinacao.view_avisovacinacao')
 def listar_avisos(request):
     """Avisos de vacinação: o tutor vê só os dos seus pets; a equipe (staff) vê todos."""
     avisos = AvisoVacinacao.objects.select_related(

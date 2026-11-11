@@ -8,19 +8,21 @@ from .forms import ConsultaForm
 
 # Listar todas as consultas
 @login_required
+@permission_required('consulta.view_consulta')
 def listar_consultas(request):
     consultas = filtrar_por_tutor(Consulta.objects.select_related('pet', 'profissional'), request.user)
     return render(request, 'consulta/consulta_list.html', {'consultas': consultas})
 
 # Exibir detalhes da consulta
 @login_required
+@permission_required('consulta.view_consulta')
 def detalhar_consulta(request, pk):
     consulta = get_object_or_404(filtrar_por_tutor(Consulta.objects.all(), request.user), pk=pk)
     return render(request, 'consulta/consulta_detail.html', {'consulta': consulta})
 
 # Criar uma nova consulta
-@permissao_ou_tutor('consulta.add_consulta')
 @login_required
+@permission_required('consulta.add_consulta')
 def criar_consulta(request):
     if request.method == 'POST':
         form = restringir_form(ConsultaForm(request.POST), request.user)
@@ -35,8 +37,8 @@ def criar_consulta(request):
     return render(request, 'consulta/consulta_form.html', {'form': form, 'titulo': 'Agendar Consulta'})
 
 # Editar uma consulta existente
-@permissao_ou_tutor('consulta.change_consulta')
 @login_required
+@permission_required('consulta.change_consulta')
 def editar_consulta(request, pk):
     consulta = get_object_or_404(filtrar_por_tutor(Consulta.objects.all(), request.user), pk=pk)
 
@@ -59,9 +61,10 @@ def editar_consulta(request, pk):
         form = restringir_form(ConsultaForm(instance=consulta), request.user)
     return render(request, 'consulta/consulta_form.html', {'form': form, 'consulta': consulta})
 
+
 # Excluir uma consulta
-@permissao_ou_tutor('consulta.delete_consulta')
 @login_required
+@permission_required('consulta.delete_consulta')
 def excluir_consulta(request, pk):
     consulta = get_object_or_404(filtrar_por_tutor(Consulta.objects.all(), request.user), pk=pk)
 

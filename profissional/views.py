@@ -1,10 +1,11 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Profissional
 from .forms import ProfissionalForm
 
 # CREATE
 @login_required
+@permission_required('profissional.add_profissional')
 def criar_profissional(request):
     if request.method == 'POST':
         form = ProfissionalForm(request.POST)
@@ -24,6 +25,7 @@ def criar_profissional(request):
 
 # LIST
 @login_required
+@permission_required('profissional.view_profissional')
 def listar_profissionais(request):
     profissionais = Profissional.objects.all()
 
@@ -36,6 +38,7 @@ def listar_profissionais(request):
 
 # DETAIL
 @login_required
+@permission_required('profissional.view_profissional')
 def detalhar_profissional(request, pk):
     profissional = get_object_or_404(
         Profissional,
@@ -51,6 +54,7 @@ def detalhar_profissional(request, pk):
 
 # UPDATE
 @login_required
+@permission_required('profissional.change_profissional')
 def editar_profissional(request, pk):
     profissional = get_object_or_404(
         Profissional,
@@ -80,6 +84,7 @@ def editar_profissional(request, pk):
 
 # DELETE
 @login_required
+@permission_required('profissional.delete_profissional')
 def excluir_profissional(request, pk):
     profissional = get_object_or_404(Profissional, id=pk)
 

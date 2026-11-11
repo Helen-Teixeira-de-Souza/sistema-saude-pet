@@ -6,17 +6,19 @@ from .models import Cirurgia
 from .forms import CirurgiaForm
 
 @login_required
+@permission_required('cirurgia.view_cirurgia')
 def listar_cirurgias(request):
     cirurgias = filtrar_por_tutor(Cirurgia.objects.select_related('pet', 'profissional'), request.user)
     return render(request, "cirurgia/cirurgia_list.html", {"cirurgias": cirurgias})
 
 @login_required
+@permission_required('cirurgia.view_cirurgia')
 def detalhar_cirurgia(request, pk):
     cirurgia = get_object_or_404(filtrar_por_tutor(Cirurgia.objects.all(), request.user), pk=pk)
     return render(request, "cirurgia/cirurgia_detail.html", {"cirurgia": cirurgia})
 
 @login_required
-@permissao_ou_tutor('cirurgia.add_cirurgia')
+@permission_required('cirurgia.add_cirurgia')
 def criar_cirurgia(request):
     if request.method == "POST":
         form = restringir_form(CirurgiaForm(request.POST), request.user)
@@ -31,7 +33,7 @@ def criar_cirurgia(request):
     return render(request, "cirurgia/cirurgia_form.html", {"form": form, "titulo": "Cadastrar Cirurgia"})
 
 @login_required
-@permissao_ou_tutor('cirurgia.change_cirurgia')
+@permission_required('cirurgia.change_cirurgia')
 def editar_cirurgia(request, pk):
     cirurgia = get_object_or_404(filtrar_por_tutor(Cirurgia.objects.all(), request.user), pk=pk)
     if request.method == "POST":
@@ -47,7 +49,7 @@ def editar_cirurgia(request, pk):
     return render(request, "cirurgia/cirurgia_form.html", {"form": form, "titulo": "Editar Cirurgia", "cirurgia": cirurgia})
 
 @login_required
-@permissao_ou_tutor('cirurgia.delete_cirurgia')
+@permission_required('cirurgia.delete_cirurgia')
 def excluir_cirurgia(request, pk):
     cirurgia = get_object_or_404(filtrar_por_tutor(Cirurgia.objects.all(), request.user), pk=pk)
     if request.method == "POST":

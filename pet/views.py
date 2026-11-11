@@ -1,6 +1,6 @@
 from datetime import date
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
@@ -12,6 +12,7 @@ from .models import Pet
 
 # LISTAR
 @login_required(login_url='/login/')
+@permission_required('pet.view_pet')
 def listar_pets(request):
     if request.user.is_staff or request.user.is_superuser:
         pets = Pet.objects.all()
@@ -23,6 +24,7 @@ def listar_pets(request):
 
 # DETALHAR
 @login_required(login_url='/login/')
+@permission_required('pet.view_pet')
 def detalhar_pet(request, pk):
     if request.user.is_staff or request.user.is_superuser:
         pet = get_object_or_404(Pet, pk=pk)
@@ -55,6 +57,7 @@ def detalhar_pet(request, pk):
 
 # CRIAR
 @login_required(login_url='/login/')
+@permission_required('pet.add_pet')
 def criar_pet(request):
     if request.method == 'POST':
         form = PetForm(request.POST)
@@ -77,6 +80,7 @@ def criar_pet(request):
 
 # ATUALIZAR / EDITAR
 @login_required(login_url='/login/')
+@permission_required('pet.change_pet')
 def editar_pet(request, pk):
     if request.user.is_staff or request.user.is_superuser:
         pet = get_object_or_404(Pet, pk=pk)
@@ -104,6 +108,7 @@ def editar_pet(request, pk):
 
 # DELETAR / EXCLUIR
 @login_required(login_url='/login/')
+@permission_required('pet.delete_pet')
 def excluir_pet(request, pk):
     if request.user.is_staff or request.user.is_superuser:
         pet = get_object_or_404(Pet, pk=pk)
@@ -120,6 +125,7 @@ def excluir_pet(request, pk):
 
 # HISTÓRICO DE SAÚDE
 @login_required(login_url='/login/')
+@permission_required('pet.view_pet')
 def historico_pet(request, pk):
     if request.user.is_staff or request.user.is_superuser:
         pet = get_object_or_404(Pet, pk=pk)

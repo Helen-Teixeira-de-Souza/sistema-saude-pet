@@ -8,11 +8,13 @@ from datetime import date, timedelta
 from django.utils import timezone
 
 @login_required
+@permission_required('medicamento.view_medicamento')
 def listar_medicamentos(request):
     medicamentos = filtrar_por_tutor(Medicamento.objects.select_related('pet', 'consulta'), request.user)
     return render(request, 'medicamento/medicamento_list.html', {'medicamentos': medicamentos})
 
 @login_required
+@permission_required('medicamento.view_medicamento')
 def detalhar_medicamento(request, pk):
     medicamento = get_object_or_404(filtrar_por_tutor(Medicamento.objects.all(), request.user), pk=pk)
     
@@ -27,8 +29,8 @@ def detalhar_medicamento(request, pk):
     }
     return render(request, 'medicamento/medicamento_detail.html', context)
 
-@permissao_ou_tutor('medicamento.add_medicamento')
 @login_required
+@permission_required('medicamento.add_medicamento')
 def criar_medicamento(request):
     if request.method == 'POST':
         form = restringir_form(MedicamentoForm(request.POST), request.user)
@@ -42,8 +44,8 @@ def criar_medicamento(request):
         form = restringir_form(MedicamentoForm(), request.user)
     return render(request, 'medicamento/medicamento_form.html', {'form': form, 'titulo': 'Cadastrar Medicamento'})
 
-@permissao_ou_tutor('medicamento.change_medicamento')
 @login_required
+@permission_required('medicamento.change_medicamento')
 def editar_medicamento(request, pk):
     medicamento = get_object_or_404(filtrar_por_tutor(Medicamento.objects.all(), request.user), pk=pk)
 
@@ -67,8 +69,8 @@ def editar_medicamento(request, pk):
 
     return render(request, 'medicamento/medicamento_form.html', {'form': form, 'medicamento': medicamento})
 
-@permissao_ou_tutor('medicamento.delete_medicamento')
 @login_required
+@permission_required('medicamento.delete_medicamento')
 def excluir_medicamento(request, pk):
     medicamento = get_object_or_404(filtrar_por_tutor(Medicamento.objects.all(), request.user), pk=pk)
 

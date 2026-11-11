@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import get_object_or_404, redirect, render
 from .forms import TutorCreationForm, TutorForm
@@ -12,6 +12,8 @@ from exame.models import Exame
 from medicamento.models import Medicamento
 
 # LISTAR
+@login_required
+@permission_required('auth.view_user')
 @staff_member_required(login_url='/login/')
 def listar_tutores(request):
   tutores = Tutor.objects.all()
@@ -19,6 +21,8 @@ def listar_tutores(request):
 
 
 # DETALHAR
+@login_required
+@permission_required('auth.view_user')
 @staff_member_required(login_url='/login/')
 def detalhar_tutor(request, pk):
   tutor = get_object_or_404(Tutor, pk=pk)
@@ -27,6 +31,9 @@ def detalhar_tutor(request, pk):
 
 
 # CADASTRAR (Criar)
+@login_required
+@permission_required('auth.add_user')
+@staff_member_required(login_url='/login/')
 def registrar_tutor(request):
   if request.method == 'POST':
     form = TutorCreationForm(request.POST)
@@ -48,6 +55,7 @@ def registrar_tutor(request):
 
 # EDITAR (Atualizar)
 @login_required
+@permission_required('auth.change_user')
 def editar_tutor(request, pk):
   if not request.user.is_staff and request.user.pk != pk:
     return redirect('tutor:dashboard')
@@ -71,6 +79,8 @@ def editar_tutor(request, pk):
 
 
 # EXCLUIR (Deletar)
+@login_required
+@permission_required('auth.delete_user')
 @staff_member_required(login_url='/login/')
 def excluir_tutor(request, pk):
   tutor = get_object_or_404(Tutor, pk=pk)
@@ -82,7 +92,8 @@ def excluir_tutor(request, pk):
   return render(request, 'tutor/tutor_confirm_delete.html', {'tutor': tutor})
 
 # Dashboard do tutor
-@login_required(login_url='/login/')
+@login_required
+@permission_required('auth.view_user')
 def dashboard_tutor(request):
 
     if request.user.is_staff:
