@@ -34,7 +34,7 @@ def criar_exame(request):
     return render(request, 'exame/exame_form.html', {'form': form, 'titulo': 'Cadastrar Exame'})
 
 @login_required
-@permission_required
+@permission_required('exame.change_exame')
 def editar_exame(request, pk):
     exame = get_object_or_404(filtrar_por_tutor(Exame.objects.all(), request.user), pk=pk)
 

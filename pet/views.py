@@ -21,7 +21,6 @@ def listar_pets(request):
 
     return render(request, 'pet/pet_list.html', {'pet_list': pets})
 
-
 # DETALHAR
 @login_required(login_url='/login/')
 @permission_required('pet.view_pet')
